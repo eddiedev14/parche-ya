@@ -289,7 +289,7 @@ Estructura por **features / shared / pages** dentro de `src/`:
 
 ```
 src/
-├── assets/            # imágenes y recursos estáticos (logo.svg)
+├── assets/            # imágenes y recursos estáticos (logo.webp)
 ├── features/          # lógica y UI propia de un dominio: auth, plans, chat...
 │   └── <feature>/
 │       ├── components/
@@ -320,7 +320,7 @@ Convenciones:
 
 ## 12. Logo
 
-Placeholder en `src/assets/images/logo.svg` (gota/pin blanco sobre cuadrado naranja con una chispa amarilla). Se consume con `<Logo size={96} />`. Tamaños: **96 px** en Bienvenida y pantalla de carga, **64 px** en Login. Cuando exista el logo definitivo, basta con reemplazar ese archivo.
+Placeholder en `src/assets/images/logo.webp` (gota/pin blanco sobre cuadrado naranja con una chispa amarilla). Se consume con `<Logo size={96} />`. Tamaños: **96 px** en Bienvenida y pantalla de carga, **64 px** en Login. Cuando exista el logo definitivo, basta con reemplazar ese archivo.
 
 ---
 
