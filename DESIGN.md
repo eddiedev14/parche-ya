@@ -143,6 +143,8 @@ Validaciones y mensajes (útiles para los estados de error del diseño):
 
 Van en `src/shared/components/`, un archivo `.tsx` por componente, export con nombre. Props en una `interface Props`. Estilos con Tailwind (sin CSS aparte).
 
+**Ya implementados:** `PlanCard`, `CategoryChip`, `StatusBadge`, `Avatar`, `EmptyState`, `PlanCardSkeleton`, `Logo` y `LoadingScreen`. Reutilízalos; no los redibujes. Se importan desde `src/shared/components`. Tipos del plan en `src/shared/types/plan.types.ts`; `getPlanStatus`, `formatPlanWhen` y `formatDistance` en `src/shared/helpers/plan.helper.ts`.
+
 | Componente | Props | Qué muestra |
 | --- | --- | --- |
 | `PlanCard` | `plan`, `count`, `distanceKm`, `onClick` | Círculo de **44 px** con el ícono de la categoría (fondo = color de categoría al 12 %, ícono en el color); título (1 línea, truncado); fila reloj + cuándo ("Ahora", "En 25 min", "Hoy 6:30 p. m."); fila pin + lugar y distancia ("350 m"); cupos "3/6" con barra de progreso; `Avatar` del organizador; `StatusBadge` arriba a la derecha |
@@ -193,7 +195,7 @@ Son **todas** las pantallas (14 + 3 superpuestos). Las rutas `/plan/...` están 
 
 | Ruta | Pantalla | Archivo | Estructura (de arriba a abajo) |
 | --- | --- | --- | --- |
-| `/welcome` | Bienvenida | `pages/welcome/WelcomePage.tsx` | Logo 96 px centrado; H1 "Planes para ahora, con gente cerca"; texto de apoyo de 2 líneas; botón primario "Crear cuenta"; botón outline "Ya tengo cuenta" |
+| `/welcome` | Bienvenida | `pages/welcome/WelcomePage.tsx` | Logo 96 px centrado; H1 "Planes para ahora, con gente cerca"; texto de apoyo de 2 líneas; botón primario "Registrarse"; botón outline "Iniciar sesión" |
 | `/login` | Iniciar sesión | `pages/login/LoginPage.tsx` | Logo 64 px; H2 "Hola de nuevo"; campos correo y contraseña; enlace "¿Olvidaste tu contraseña?"; botón primario "Iniciar sesión"; pie "¿No tienes cuenta? Regístrate" |
 | `/register` | Crear cuenta | `pages/register/RegisterPage.tsx` | Botón atrás; H2 "Crea tu cuenta"; foto de perfil (avatar con cámara), nombre, bio, correo, contraseña y confirmar contraseña; checkbox de términos; botón primario "Crear cuenta"; pie "¿Ya tienes cuenta? Inicia sesión" |
 | `/tabs/explore` | Explorar (tab 1) | `pages/explore/ExplorePage.tsx` | Header "Explorar"; fila de chips ("Todos" + 8 categorías) con scroll horizontal; línea "Cerca de ti · 5 km" con `chevron-down` (abre `IonActionSheet`); banner amarillo si no hay permiso de ubicación; lista de `PlanCard`; FAB "+" abajo a la derecha |
