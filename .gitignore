@@ -1,0 +1,35 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# environment variables (usar .env.example como plantilla)
+.env
+.env.*
+!.env.example
+
+# testing
+/coverage
+
+# production
+/dist
+
+# android (se genera con `npx cap add android` cuando haga falta)
+/android
+
+# misc
+.DS_Store
+/.nx
+/.nx/cache
+/.vscode/*
+!/.vscode/extensions.json
+.idea
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional eslint cache
+.eslintcache
