@@ -1,11 +1,10 @@
-import logo from "../../assets/images/logo.svg";
+import logo from "../../assets/images/logo.webp";
 
 interface Props {
   size?: number;
   className?: string;
 }
 
-//? Placeholder: reemplazar src/assets/images/logo.svg por el logo definitivo
 export const Logo = ({ size = 96, className = "" }: Props) => {
   return (
     <img
