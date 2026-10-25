@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -39,9 +40,11 @@ export default function useAuthState() {
   //* States
   const [user, setUser] = useState<AuthUser | null>(null);
   const [userLoading, setUserLoading] = useState(true);
+  //? Mientras dura el registro (cuenta + foto) AppRoutes no redirige, aunque Firebase ya haya iniciado sesión
+  const [registering, setRegistering] = useState(false);
 
   //* Firestore collection
-  const { setById } = useCollection<User>("users");
+  const { setById, update } = useCollection<User>("users");
 
   //* Effects
   useEffect(() => {
@@ -88,15 +91,17 @@ export default function useAuthState() {
         password,
       );
 
+      //? La foto se sube después del registro (ImageKit exige sesión) y actualiza este documento con updateUserPhoto
       const userId = userCredential.user.uid;
-      await setById(userId, {
+      const created = await setById(userId, {
         displayName,
         email,
         bio,
-        photoUrl: `imageKit URL/${userId}`,
+        photoUrl: "",
         fcmToken: null,
         role: "user",
       });
+      if (!created) error = "No pudimos guardar tu perfil. Inténtalo de nuevo.";
     } catch (err) {
       error = getAuthErrorMessage(err);
     }
@@ -104,10 +109,31 @@ export default function useAuthState() {
     return error;
   };
 
+  //? Requiere sesión iniciada: se llama justo después de registrarse, con la URL devuelta por ImageKit
+  const updateUserPhoto = async (photoUrl: string): Promise<string | null> => {
+    const fbUser = auth.currentUser;
+    if (!fbUser) return "No hay una sesión iniciada.";
+
+    const updated = await update(fbUser.uid, { photoUrl });
+    if (!updated) return "No pudimos guardar tu foto de perfil.";
+
+    //? updateProfile no dispara onAuthStateChanged, por eso se sincroniza el estado local a mano
+    try {
+      await updateProfile(fbUser, { photoURL: photoUrl });
+    } catch {
+      //? El documento de Firestore ya quedó actualizado; el photoURL de Auth es secundario
+    }
+    setUser((prev) => (prev?.id === fbUser.uid ? { ...prev, photoUrl } : prev));
+    return null;
+  };
+
   return {
     user,
     userLoading,
+    registering,
+    setRegistering,
     registerWithEmailAndPassword,
+    updateUserPhoto,
     logout,
   };
 }

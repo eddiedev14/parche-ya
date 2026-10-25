@@ -1,30 +1,9 @@
 import { IonButton, IonSpinner } from "@ionic/react";
 import { AvatarPicker, Input, PasswordInput } from "../../../shared/components";
-import { Toast } from "../../../shared/classes/Toast.class";
-import { useAuth } from "../hooks/useAuth";
-import { useForm } from "../../../shared/hooks/useForm";
-import { EMPTY_SIGNUP, validateSignup } from "../validations/signup.validation";
+import { useSignupForm } from "../hooks/useSignupForm";
 
 export const SignupForm = () => {
-  const { registerWithEmailAndPassword } = useAuth();
-  const form = useForm({
-    initialValues: EMPTY_SIGNUP,
-    validate: validateSignup,
-    onSubmit: async (values) => {
-      const { photo, confirmPassword: _, ...userRegister } = values;
-
-      //? 1. Cargar imagen en ImageKit (función serverless)
-
-      //? 2. Registrar usuario en firebase
-      const registerError = await registerWithEmailAndPassword(userRegister);
-      if (registerError) {
-        Toast.error(registerError);
-        return;
-      }
-
-      Toast.success("¡Usuario creado correctamente!");
-    },
-  });
+  const { form } = useSignupForm();
 
   return (
     <form
