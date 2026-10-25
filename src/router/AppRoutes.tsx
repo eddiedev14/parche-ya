@@ -8,12 +8,14 @@ import { AuthPage, ExplorePage, WelcomePage } from "../pages";
 import { GUEST_HOME_ROUTE, HOME_ROUTE, PUBLIC_ROUTES, ROUTES } from "./routes";
 
 const AppRoutes = () => {
-  const { user, userLoading } = useAuth();
+  const { user, userLoading, registering } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
-  const isRedirecting = !userLoading && (user ? isPublicRoute : !isPublicRoute);
+  //? Durante el registro ya hay sesión pero la foto aún se está subiendo: se espera a que termine para redirigir
+  const isRedirecting =
+    !userLoading && !registering && (user ? isPublicRoute : !isPublicRoute);
 
   useEffect(() => {
     if (isRedirecting) {
