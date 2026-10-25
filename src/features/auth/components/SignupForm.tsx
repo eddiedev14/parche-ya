@@ -1,30 +1,35 @@
 import { IonButton, IonSpinner } from "@ionic/react";
-
-import { AvatarPicker } from "../../../shared/components/AvatarPicker";
-import { Input } from "../../../shared/components/Input";
-import { PasswordInput } from "../../../shared/components/PasswordInput";
+import { AvatarPicker, Input, PasswordInput } from "../../../shared/components";
+import { useForm } from "../../../shared/hooks/useForm";
+import { EMPTY_SIGNUP, validateSignup } from "../validations/signup.validation";
 
 export const SignupForm = () => {
-  const submitting = false;
+  const form = useForm({
+    initialValues: EMPTY_SIGNUP,
+    validate: validateSignup,
+    onSubmit: async () => {
+      // Ejecutar submit real
+    },
+  });
 
   return (
-    <form noValidate className="flex flex-col gap-4">
-      <AvatarPicker value="" error="" onChange={() => {}} />
+    <form
+      noValidate
+      onSubmit={form.handleSubmit}
+      className="flex flex-col gap-4"
+    >
+      <AvatarPicker {...form.getControlProps("photoUrl")} />
 
       <Input
         label="Nombre"
         placeholder="¿Cómo te llamamos?"
         autocomplete="name"
-        value=""
-        error=""
-        onChange={() => {}}
+        {...form.getFieldProps("name")}
       />
       <Input
         label="Bio"
         placeholder="¿Cuéntanos sobre ti?"
-        value=""
-        error=""
-        onChange={() => {}}
+        {...form.getFieldProps("bio")}
       />
       <Input
         label="Correo"
@@ -32,35 +37,29 @@ export const SignupForm = () => {
         inputmode="email"
         autocomplete="email"
         placeholder="tucorreo@ejemplo.com"
-        value=""
-        error=""
-        onChange={() => {}}
+        {...form.getFieldProps("email")}
       />
       <PasswordInput
         withToggle
         label="Contraseña"
         autocomplete="new-password"
         placeholder="Mínimo 8 caracteres"
-        value=""
-        error=""
-        onChange={() => {}}
+        {...form.getFieldProps("password")}
       />
       <PasswordInput
         label="Confirmar contraseña"
         autocomplete="new-password"
         placeholder="Repite tu contraseña"
-        value=""
-        error=""
-        onChange={() => {}}
+        {...form.getFieldProps("confirmPassword")}
       />
 
       <IonButton
         type="submit"
         expand="block"
-        disabled={submitting}
+        disabled={form.submitting}
         className="mt-2 mb-0"
       >
-        {submitting ? (
+        {form.submitting ? (
           <IonSpinner name="crescent" aria-label="Creando cuenta" />
         ) : (
           "Crear cuenta"
