@@ -18,7 +18,8 @@ const imagekit = new ImageKit({
 //? Orígenes que pueden llamar a este endpoint desde el navegador. Se amplían con ALLOWED_ORIGINS (separados por coma)
 const ALLOWED_ORIGINS = [
   "http://localhost:8100", // ionic serve
-  "http://localhost", // Capacitor Android
+  "https://localhost", // Capacitor Android (androidScheme por defecto desde Capacitor 6)
+  "http://localhost", // Capacitor Android con androidScheme: "http"
   "capacitor://localhost", // Capacitor iOS
   "ionic://localhost",
   ...(process.env.ALLOWED_ORIGINS?.split(",").map((o) => o.trim()) ?? []),
