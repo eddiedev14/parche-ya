@@ -34,6 +34,14 @@
   --ion-color-success-shade: #1e9b6e;
   --ion-color-success-tint: #38b88a;
 
+  /* Azul claro (info). Ionic no trae un color "info", por eso también existe la clase .ion-color-info más abajo */
+  --ion-color-info: #2e90fa;
+  --ion-color-info-rgb: 46, 144, 250;
+  --ion-color-info-contrast: #1f1b2e;
+  --ion-color-info-contrast-rgb: 31, 27, 46;
+  --ion-color-info-shade: #287fdc;
+  --ion-color-info-tint: #439bfa;
+
   --ion-color-warning: #f5a524;
   --ion-color-warning-rgb: 245, 165, 36;
   --ion-color-warning-contrast: #1f1b2e;
@@ -62,6 +70,16 @@
   --ion-tab-bar-color: #6b6680;
   --ion-tab-bar-color-selected: #e8481f;
   --ion-placeholder-color: #6b6680;
+}
+
+/* Habilita color="info" en los componentes de Ionic (IonToast, IonButton, IonChip...) */
+.ion-color-info {
+  --ion-color-base: var(--ion-color-info);
+  --ion-color-base-rgb: var(--ion-color-info-rgb);
+  --ion-color-contrast: var(--ion-color-info-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-info-contrast-rgb);
+  --ion-color-shade: var(--ion-color-info-shade);
+  --ion-color-tint: var(--ion-color-info-tint);
 }
 
 body {

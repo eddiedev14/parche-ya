@@ -2,7 +2,8 @@ import { EMAIL_REGEX } from "../../../shared/helpers/constants";
 import type { FormErrors } from "../../../shared/hooks/useForm";
 
 export interface SignupValues {
-  photoUrl: string | null;
+  //? Archivo de la foto de perfil, listo para subir a ImageKit
+  photo: File | null;
   name: string;
   bio: string;
   email: string;
@@ -13,7 +14,7 @@ export interface SignupValues {
 export type SignupErrors = FormErrors<SignupValues>;
 
 export const EMPTY_SIGNUP: SignupValues = {
-  photoUrl: null,
+  photo: null,
   name: "",
   bio: "",
   email: "",
@@ -53,7 +54,7 @@ const validatePassword = (value: string) => {
 
 export const validateSignup = (values: SignupValues): SignupErrors => {
   const errors: SignupErrors = {
-    photoUrl: values.photoUrl ? undefined : "Agrega tu foto de perfil",
+    photo: values.photo ? undefined : "Agrega tu foto de perfil",
     name: validateName(values.name),
     bio: validateBio(values.bio),
     email: validateEmail(values.email),

@@ -23,6 +23,17 @@ export default tseslint.config(
         "warn",
         { allowConstantExport: true },
       ],
+      //? Lo que empieza con "_" se considera "no usado a propósito" (ej. confirmPassword al registrar)
+      //? ignoreRestSiblings: no marca los campos que se separan con `...rest` solo para excluirlos
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
       "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
       "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     },
