@@ -10,11 +10,19 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "firebase-admin": "^14.5.0",
     "imagekit": "^6.0.0"
   },
   "devDependencies": {
     "@vercel/node": "^27.0.2"
+  },
+  "overrides": {
+    "jwks-rsa": {
+      "jose": "^4.15.9"
+    }
   }
 }
