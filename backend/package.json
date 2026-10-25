@@ -16,8 +16,5 @@
   },
   "devDependencies": {
     "@vercel/node": "^27.0.2"
-  },
-  "overrides": {
-    "jose": "4.15.9"
   }
 }
