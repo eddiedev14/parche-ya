@@ -3,11 +3,18 @@ import { useEffect, useState } from "react";
 
 //* Firebase
 import { auth, db } from "../../../shared/firebase/config";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 // * Types & utils
 import type { AuthUser, User, UserRole } from "../types/auth.types";
+import { useCollection } from "../../../shared/firebase/hooks/useCollection";
+import { SignupValues as UserRegister } from "../validations/signup.validation";
+import { getAuthErrorMessage } from "../../../shared/firebase/helpers/auth.helper";
 
 //? El rol vive en users/{uid}. Si el documento no existe todavía (registro en curso) o falla la lectura, se asume "user"
 const getUserRole = async (uid: string): Promise<UserRole> => {
@@ -33,6 +40,9 @@ export default function useAuthState() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [userLoading, setUserLoading] = useState(true);
 
+  //* Firestore collection
+  const { setById } = useCollection<User>("users");
+
   //* Effects
   useEffect(() => {
     //? La sesión persiste entre recargas (persistencia local por defecto de getAuth)
@@ -44,6 +54,7 @@ export default function useAuthState() {
       }
 
       //? Firebase Auth es la fuente de verdad de la sesión; el rol se completa después sin bloquear la carga
+      setUserLoading(true);
       setUser({
         id: fbUser.uid,
         email: fbUser.email ?? "",
@@ -62,9 +73,41 @@ export default function useAuthState() {
     };
   }, []);
 
+  //* Functions
+  const registerWithEmailAndPassword = async (
+    user: Omit<UserRegister, "photo" | "confirmPassword">,
+  ): Promise<string | null> => {
+    let error: string | null = null;
+    const { name: displayName, bio, email, password } = user;
+
+    // Proceed with the register in Firebase Auth
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      const userId = userCredential.user.uid;
+      await setById(userId, {
+        displayName,
+        email,
+        bio,
+        photoUrl: `imageKit URL/${userId}`,
+        fcmToken: null,
+        role: "user",
+      });
+    } catch (err) {
+      error = getAuthErrorMessage(err);
+    }
+
+    return error;
+  };
+
   return {
     user,
     userLoading,
+    registerWithEmailAndPassword,
     logout,
   };
 }

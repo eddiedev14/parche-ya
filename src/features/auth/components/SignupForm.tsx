@@ -1,14 +1,28 @@
 import { IonButton, IonSpinner } from "@ionic/react";
 import { AvatarPicker, Input, PasswordInput } from "../../../shared/components";
+import { Toast } from "../../../shared/classes/Toast.class";
+import { useAuth } from "../hooks/useAuth";
 import { useForm } from "../../../shared/hooks/useForm";
 import { EMPTY_SIGNUP, validateSignup } from "../validations/signup.validation";
 
 export const SignupForm = () => {
+  const { registerWithEmailAndPassword } = useAuth();
   const form = useForm({
     initialValues: EMPTY_SIGNUP,
     validate: validateSignup,
-    onSubmit: async () => {
-      // Ejecutar submit real
+    onSubmit: async (values) => {
+      const { photo, confirmPassword: _, ...userRegister } = values;
+
+      //? 1. Cargar imagen en ImageKit (función serverless)
+
+      //? 2. Registrar usuario en firebase
+      const registerError = await registerWithEmailAndPassword(userRegister);
+      if (registerError) {
+        Toast.error(registerError);
+        return;
+      }
+
+      Toast.success("¡Usuario creado correctamente!");
     },
   });
 
@@ -18,7 +32,7 @@ export const SignupForm = () => {
       onSubmit={form.handleSubmit}
       className="flex flex-col gap-4"
     >
-      <AvatarPicker {...form.getControlProps("photoUrl")} />
+      <AvatarPicker {...form.getControlProps("photo")} />
 
       <Input
         label="Nombre"
@@ -47,6 +61,7 @@ export const SignupForm = () => {
         {...form.getFieldProps("password")}
       />
       <PasswordInput
+        withToggle
         label="Confirmar contraseña"
         autocomplete="new-password"
         placeholder="Repite tu contraseña"

@@ -1,20 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IonButton, IonIcon } from "@ionic/react";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import {
+  Camera,
+  CameraResultType,
+  CameraSource,
+  type Photo,
+} from "@capacitor/camera";
 import { cameraOutline, personOutline } from "ionicons/icons";
 
+import { webPathToFile } from "../helpers/file.helper";
 import { InputError } from "./InputError";
 
 interface Props {
-  //? URL local de la foto tomada (webPath). null si aún no hay foto
-  value: string | null;
-  onChange: (photoUrl: string) => void;
+  //? Foto tomada como File (lista para subir). null si aún no hay foto
+  value: File | null;
+  onChange: (photo: File) => void;
   //? Error de validación del formulario (ej. falta la foto)
   error?: string;
   size?: number;
 }
 
 const PERMISSION_ERROR = "Debes tener activado el permiso de camara";
+const READ_ERROR = "No pudimos leer la foto. Inténtalo de nuevo";
 
 //? Cuando el usuario cierra la cámara sin tomar foto el plugin lanza un error "cancelled"; no es un fallo
 const isCancelled = (error: unknown) =>
@@ -23,20 +30,45 @@ const isCancelled = (error: unknown) =>
 export const AvatarPicker = ({ value, onChange, error, size = 112 }: Props) => {
   const [cameraError, setCameraError] = useState("");
 
+  //? URL temporal solo para mostrar el File en el <img>. Se libera al cambiar de foto o desmontar
+  const [preview, setPreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!value) {
+      setPreview(null);
+      return;
+    }
+    const url = URL.createObjectURL(value);
+    setPreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [value]);
+
   const takePhoto = async () => {
+    //? Errores de la cámara (permiso denegado) y de lectura del archivo se separan para no mezclar mensajes
+    let photo: Photo;
     try {
-      const photo = await Camera.getPhoto({
+      photo = await Camera.getPhoto({
         source: CameraSource.Camera,
         resultType: CameraResultType.Uri,
         quality: 80,
         width: 640,
         correctOrientation: true,
       });
-      if (!photo.webPath) return;
-      setCameraError("");
-      onChange(photo.webPath);
     } catch (e) {
       if (!isCancelled(e)) setCameraError(PERMISSION_ERROR);
+      return;
+    }
+    if (!photo.webPath) return;
+
+    try {
+      const file = await webPathToFile(
+        photo.webPath,
+        `profile.${photo.format}`,
+      );
+      setCameraError("");
+      onChange(file);
+    } catch {
+      setCameraError(READ_ERROR);
     }
   };
 
@@ -65,7 +97,7 @@ export const AvatarPicker = ({ value, onChange, error, size = 112 }: Props) => {
           >
             {value ? (
               <img
-                src={value}
+                src={preview ?? undefined}
                 alt="Tu foto de perfil"
                 className="size-full object-cover"
               />
