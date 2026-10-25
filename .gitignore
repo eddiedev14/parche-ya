@@ -10,14 +10,12 @@ node_modules
 .env.*
 !.env.example
 
-# testing
+# testingcd android; ./gradlew --stop; cd ..
+ionic-apk
 /coverage
 
 # production
 /dist
-
-# android (se genera con `npx cap add android` cuando haga falta)
-/android
 
 # misc
 .DS_Store
