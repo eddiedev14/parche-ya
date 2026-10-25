@@ -4,7 +4,7 @@ import { IonRouterOutlet } from "@ionic/react";
 
 import { useAuth } from "../features/auth";
 import { LoadingScreen } from "../shared/components/LoadingScreen";
-import { ExplorePage, WelcomePage } from "../pages";
+import { AuthPage, ExplorePage, WelcomePage } from "../pages";
 import { GUEST_HOME_ROUTE, HOME_ROUTE, PUBLIC_ROUTES, ROUTES } from "./routes";
 
 const AppRoutes = () => {
@@ -35,6 +35,11 @@ const AppRoutes = () => {
     <IonRouterOutlet>
       {/* Public Routes (sin sesión) */}
       <Route path={ROUTES.welcome} element={publicPage(<WelcomePage />)} />
+      <Route path={ROUTES.login} element={publicPage(<AuthPage />)} />
+      <Route
+        path={ROUTES.register}
+        element={publicPage(<AuthPage isSignup />)}
+      />
 
       {/* User Routes (rol user) */}
       <Route path={ROUTES.explore} element={privatePage(<ExplorePage />)} />
