@@ -1,4 +1,5 @@
 import { FirebaseError } from "firebase/app";
+import { auth } from "../config";
 
 // Función para obtener el mensaje de error de firebase a la hora de autenticarse
 const getAuthErrorMessage = (error: unknown): string => {
@@ -39,4 +40,10 @@ const getAuthErrorMessage = (error: unknown): string => {
   return "Ocurrió un error inesperado";
 };
 
-export { getAuthErrorMessage };
+// Función para obtener el firebaseToken del usuario logueado
+const getFirebaseToken = async (): Promise<string | undefined> => {
+  const tokenId = await auth.currentUser?.getIdToken();
+  return tokenId;
+};
+
+export { getAuthErrorMessage, getFirebaseToken };
