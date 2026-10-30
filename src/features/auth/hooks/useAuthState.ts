@@ -6,6 +6,7 @@ import { auth, db } from "../../../shared/firebase/config";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
   signOut,
   updateProfile,
 } from "firebase/auth";
@@ -24,6 +25,19 @@ const getUserRole = async (uid: string): Promise<UserRole> => {
     return snapshot.exists() ? (snapshot.data() as User).role : "user";
   } catch {
     return "user";
+  }
+};
+
+//? Devuelve null si todo salió bien, o el mensaje de error
+const login = async (
+  email: string,
+  password: string,
+): Promise<string | null> => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    return null;
+  } catch (error) {
+    return getAuthErrorMessage(error);
   }
 };
 
@@ -134,6 +148,7 @@ export default function useAuthState() {
     setRegistering,
     registerWithEmailAndPassword,
     updateUserPhoto,
+    login,
     logout,
   };
 }
