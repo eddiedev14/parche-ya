@@ -9,6 +9,16 @@ import {
   musicalNotesOutline,
   restaurantOutline,
 } from "ionicons/icons";
+//? Coloco las constantes de el sidebar aquí pero no sé si sería lo mejor, cualquier cosa me avisas o lo cambias
+import { calendarOutline, compassOutline, mapOutline } from "ionicons/icons";
+import { ROUTES } from "../../router/routes";
+
+//* Items del sidebar
+export const SIDEBAR_ITEMS = [
+  { label: "Explorar", icon: compassOutline, route: ROUTES.explore },
+  { label: "Mapa", icon: mapOutline, route: ROUTES.map },
+  { label: "Mis planes", icon: calendarOutline, route: ROUTES.myPlans },
+];
 
 //* Categorías de plan (catálogo fijo).
 export const CATEGORIES = [

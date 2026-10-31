@@ -10,3 +10,4 @@ export { PasswordInput } from "./PasswordInput";
 export { PlanCard } from "./PlanCard";
 export { PlanCardSkeleton } from "./PlanCardSkeleton";
 export { StatusBadge } from "./StatusBadge";
+export { Sidebar, type SidebarItem } from "./Sidebar";
