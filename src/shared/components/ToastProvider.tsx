@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { IonToast } from "@ionic/react";
-import { Toast } from "../classes/Toast.class";
+import { Toast } from "@/shared/classes/Toast.class";
 
 type ToastType = "success" | "error" | "warning" | "info";
 

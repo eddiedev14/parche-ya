@@ -10,8 +10,8 @@ import {
   update,
   type DatabaseReference,
 } from "firebase/database";
-import { rtdb } from "../config";
-import type { RTDoc } from "../types/firestore.types";
+import { rtdb } from "@/shared/firebase/config";
+import type { RTDoc } from "@/shared/firebase/types/firestore.types";
 
 //* Colección: el nodo contiene hijos con id, por ejemplo "chats/{planId}" -> { msg1: {...}, msg2: {...} }
 export const useRTDatabase = <T>(node: string) => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { auth } from "../firebase/config";
+import { auth } from "@/shared/firebase/config";
 
 interface Props {
   url?: string | null;

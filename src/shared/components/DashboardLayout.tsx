@@ -9,9 +9,8 @@ import {
   IonToolbar,
 } from "@ionic/react";
 
-import { useAuth } from "../../features/auth";
-import { ROUTES } from "../../router/routes";
-import { SIDEBAR_ITEMS } from "../helpers/constants";
+import { useAuth } from "@/features/auth";
+import { SIDEBAR_ITEMS } from "@/shared/helpers/constants";
 import { Sidebar } from "./Sidebar";
 
 interface Props {
@@ -32,7 +31,6 @@ export const DashboardLayout = ({ title, children }: Props) => {
         items={SIDEBAR_ITEMS}
         userName={user?.displayName ?? ""}
         userPhotoUrl={user?.photoUrl}
-        profileRoute={ROUTES.profile}
         onLogout={logout}
       />
 

@@ -1,5 +1,5 @@
-import { EMAIL_REGEX } from "../../../shared/helpers/constants";
-import type { FormErrors } from "../../../shared/hooks/useForm";
+import { EMAIL_REGEX } from "@/shared/helpers/constants";
+import type { FormErrors } from "@/shared/hooks/useForm";
 
 export interface SignupValues {
   //? Archivo de la foto de perfil, listo para subir a ImageKit

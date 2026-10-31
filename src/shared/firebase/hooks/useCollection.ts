@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { db } from "../config";
+import { db } from "@/shared/firebase/config";
 import {
   collection,
   query,
@@ -20,7 +20,7 @@ import type {
   Unsubscribe,
   UpdateData,
 } from "firebase/firestore";
-import type { FirestoreDoc } from "../types/firestore.types";
+import type { FirestoreDoc } from "@/shared/firebase/types/firestore.types";
 
 export const useCollection = <T extends DocumentData>(table: string) => {
   const [results, setResults] = useState<FirestoreDoc<T>[]>([]);

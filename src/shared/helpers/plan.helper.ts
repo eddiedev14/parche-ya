@@ -1,4 +1,5 @@
-import type { Plan, PlanDate } from "../types/plan.types";
+import { Timestamp } from "firebase/firestore";
+import type { Plan, PlanDate } from "@/shared/types/plan.types";
 import type { PlanStatus } from "./constants";
 
 const MINUTE = 60_000;
@@ -15,6 +16,18 @@ const dateFormatter = new Intl.DateTimeFormat("es-CO", {
 });
 
 const startOfDay = (ms: number) => new Date(ms).setHours(0, 0, 0, 0);
+
+//? Minutos desde ahora (setMinutes solo reemplazaba el minuto de la hora actual)
+export const minutesToTimestamp = (minutes: number): Timestamp =>
+  Timestamp.fromMillis(Date.now() + minutes * MINUTE);
+
+//? "HH:MM" de hoy -> minutos desde ahora (negativo si ya pasó)
+//? shortcut: no pasa a mañana si la hora ya pasó, cambiar si hay planes de madrugada
+export const minutesUntilTime = (time: string, now = Date.now()): number => {
+  const [hours, minutes] = time.split(":").map(Number);
+  const target = new Date(now).setHours(hours, minutes, 0, 0);
+  return (target - now) / MINUTE;
+};
 
 export const toMillis = (date: PlanDate): number => {
   if (typeof date === "number") return date;

@@ -27,8 +27,6 @@ interface Props {
   items: SidebarItem[];
   userName: string;
   userPhotoUrl?: string | null;
-  //? Ruta a la que lleva tocar la foto (el perfil)
-  profileRoute: string;
   onLogout: () => void;
 }
 
@@ -37,7 +35,6 @@ export const Sidebar = ({
   items,
   userName,
   userPhotoUrl,
-  profileRoute,
   onLogout,
 }: Props) => {
   const navigate = useNavigate();
@@ -88,7 +85,6 @@ export const Sidebar = ({
         <IonMenuToggle autoHide={false} className="min-w-0 flex-1">
           <button
             type="button"
-            onClick={() => navigate(profileRoute)}
             className="flex w-full min-h-11 items-center gap-3 text-left"
           >
             <Avatar url={userPhotoUrl} name={userName} size={40} />

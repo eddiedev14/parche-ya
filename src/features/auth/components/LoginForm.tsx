@@ -1,8 +1,8 @@
 import { IonButton } from "@ionic/react";
 
-import { Input } from "../../../shared/components/Input";
-import { PasswordInput } from "../../../shared/components/PasswordInput";
-import { useLoginForm } from "../hooks/useLoginForm";
+import { Input } from "@/shared/components/Input";
+import { PasswordInput } from "@/shared/components/PasswordInput";
+import { useLoginForm } from "@/features/auth/hooks/useLoginForm";
 
 export const LoginForm = () => {
   const { form } = useLoginForm();
@@ -34,7 +34,7 @@ export const LoginForm = () => {
         className="m-0"
         disabled={form.submitting}
       >
-        "Iniciar sesión"
+        Iniciar sesión
       </IonButton>
     </form>
   );

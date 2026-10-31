@@ -1,6 +1,9 @@
-import { Toast } from "../../../shared/classes/Toast.class";
-import { useForm } from "../../../shared/hooks/useForm";
-import { EMPTY_LOGIN, validateLogin } from "../validations/login.validation";
+import { Toast } from "@/shared/classes/Toast.class";
+import { useForm } from "@/shared/hooks/useForm";
+import {
+  EMPTY_LOGIN,
+  validateLogin,
+} from "@/features/auth/validations/login.validation";
 import { useAuth } from "./useAuth";
 
 export const useLoginForm = () => {
