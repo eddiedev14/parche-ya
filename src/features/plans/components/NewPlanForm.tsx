@@ -206,7 +206,7 @@ export const NewPlanForm = ({ onClose }: Props) => {
       </IonContent>
 
       <IonFooter className="ion-no-border">
-        <IonToolbar className="px-4 pt-2 pb-[max(24px,env(safe-area-inset-bottom))]">
+        <IonToolbar className="px-4 pt-2 pb-[max(36px,var(--ion-safe-area-bottom))]">
           <IonButton
             expand="block"
             className="m-0"
