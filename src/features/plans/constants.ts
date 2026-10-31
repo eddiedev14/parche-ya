@@ -15,6 +15,9 @@ export const DURATION_OPTIONS = [
   { label: "3 h", value: 3 },
 ];
 
+//? Límites (en minutos) de la duración escrita a mano
+export const DURATION_LIMITS = { min: 15, max: 480 };
+
 //? Incluye al organizador
 export const CAPACITY = { min: 2, max: 20, initial: 4 };
 

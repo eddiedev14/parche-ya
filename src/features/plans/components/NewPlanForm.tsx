@@ -40,12 +40,14 @@ interface Props {
 
 export const NewPlanForm = ({ onClose }: Props) => {
   const [pickerOpen, setPickerOpen] = useState(false);
-  const { form } = useNewPlanForm();
+  const { form } = useNewPlanForm({ onClose });
   const { loading, getCurrentLocation } = useCurrentLocation();
 
   const category = form.getControlProps("category");
   const startInMinutes = form.getControlProps("startInMinutes");
+  const startTime = form.getFieldProps("startTime");
   const durationHours = form.getControlProps("durationHours");
+  const durationMinutes = form.getFieldProps("durationMinutes");
   const capacity = form.getControlProps("capacity");
   const location = form.getControlProps("location");
 
@@ -96,11 +98,42 @@ export const NewPlanForm = ({ onClose }: Props) => {
           />
 
           <FieldGroup legend="Cuándo empieza">
-            <OptionSegment options={START_OPTIONS} {...startInMinutes} />
+            {/* -1: ningún segmento queda marcado mientras se use la hora exacta */}
+            <OptionSegment
+              options={START_OPTIONS}
+              {...startInMinutes}
+              value={startTime.value ? -1 : startInMinutes.value}
+              onChange={(value) => {
+                startTime.onChange("");
+                startInMinutes.onChange(value);
+              }}
+            />
+            <Input
+              type="time"
+              className="mt-3"
+              label="O elige una hora exacta (hoy)"
+              {...startTime}
+            />
           </FieldGroup>
 
           <FieldGroup legend="Duración">
-            <OptionSegment options={DURATION_OPTIONS} {...durationHours} />
+            <OptionSegment
+              options={DURATION_OPTIONS}
+              {...durationHours}
+              value={durationMinutes.value ? -1 : durationHours.value}
+              onChange={(value) => {
+                durationMinutes.onChange("");
+                durationHours.onChange(value);
+              }}
+            />
+            <Input
+              type="number"
+              className="mt-3"
+              inputmode="numeric"
+              label="O escribe los minutos"
+              placeholder="Ej: 90"
+              {...durationMinutes}
+            />
           </FieldGroup>
 
           <FieldGroup legend="Cupos totales">
