@@ -1,4 +1,4 @@
-import type { Plan, PlanDate } from "../types/plan.types";
+import type { Plan, PlanDate } from "@/shared/types/plan.types";
 import type { PlanStatus } from "./constants";
 
 const MINUTE = 60_000;

@@ -11,7 +11,7 @@ import {
 } from "ionicons/icons";
 //? Coloco las constantes de el sidebar aquí pero no sé si sería lo mejor, cualquier cosa me avisas o lo cambias
 import { calendarOutline, compassOutline, mapOutline } from "ionicons/icons";
-import { ROUTES } from "../../router/routes";
+import { ROUTES } from "@/router/routes";
 
 //* Items del sidebar
 export const SIDEBAR_ITEMS = [

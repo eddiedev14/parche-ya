@@ -1,4 +1,4 @@
-import { DashboardLayout } from "../../shared/components/DashboardLayout";
+import { DashboardLayout } from "@/shared/components/DashboardLayout";
 
 //? Placeholder: se reemplaza en HU-08 (mapa de planes)
 const MapPage = () => (

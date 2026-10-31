@@ -8,8 +8,8 @@ import {
   IonTabs,
 } from "@ionic/react";
 
-import { ExplorePage, MapPage, MyPlansPage } from "../pages";
-import { TAB_ITEMS } from "../shared/helpers/constants";
+import { ExplorePage, MapPage, MyPlansPage } from "@/pages";
+import { TAB_ITEMS } from "@/shared/helpers/constants";
 import { ROUTES } from "./routes";
 
 const TabsLayout = () => (

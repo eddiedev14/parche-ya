@@ -1,13 +1,13 @@
 import { IonCard, IonIcon, IonProgressBar } from "@ionic/react";
 import { locationOutline, timeOutline } from "ionicons/icons";
 
-import { getCategory } from "../helpers/constants";
+import { getCategory } from "@/shared/helpers/constants";
 import {
   formatDistance,
   formatPlanWhen,
   getPlanStatus,
-} from "../helpers/plan.helper";
-import type { PlanDoc } from "../types/plan.types";
+} from "@/shared/helpers/plan.helper";
+import type { PlanDoc } from "@/shared/types/plan.types";
 import { Avatar } from "./Avatar";
 import { StatusBadge } from "./StatusBadge";
 

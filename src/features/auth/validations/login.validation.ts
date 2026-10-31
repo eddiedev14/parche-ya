@@ -1,4 +1,4 @@
-import { EMAIL_REGEX } from "../../../shared/helpers/constants";
+import { EMAIL_REGEX } from "@/shared/helpers/constants";
 
 export interface LoginValues {
   email: string;

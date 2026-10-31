@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 //* Firebase
-import { auth, db } from "../../../shared/firebase/config";
+import { auth, db } from "@/shared/firebase/config";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -13,10 +13,14 @@ import {
 import { doc, getDoc } from "firebase/firestore";
 
 // * Types & utils
-import type { AuthUser, User, UserRole } from "../types/auth.types";
-import { useCollection } from "../../../shared/firebase/hooks/useCollection";
-import { SignupValues as UserRegister } from "../validations/signup.validation";
-import { getAuthErrorMessage } from "../../../shared/firebase/helpers/auth.helper";
+import type {
+  AuthUser,
+  User,
+  UserRole,
+} from "@/features/auth/types/auth.types";
+import { useCollection } from "@/shared/firebase/hooks/useCollection";
+import { SignupValues as UserRegister } from "@/features/auth/validations/signup.validation";
+import { getAuthErrorMessage } from "@/shared/firebase/helpers/auth.helper";
 
 //? El rol vive en users/{uid}. Si el documento no existe todavía (registro en curso) o falla la lectura, se asume "user"
 const getUserRole = async (uid: string): Promise<UserRole> => {

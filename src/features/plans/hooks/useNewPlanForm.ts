@@ -1,8 +1,8 @@
-import { useForm } from "../../../shared/hooks/useForm";
+import { useForm } from "@/shared/hooks/useForm";
 import {
   EMPTY_NEW_PLAN,
   validateNewPlan,
-} from "../validations/newPlan.validation";
+} from "@/features/plans/validations/newPlan.validation";
 
 export const useNewPlanForm = () => {
   //* Form controller

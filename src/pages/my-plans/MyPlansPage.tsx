@@ -1,5 +1,5 @@
-import { NewPlanFab } from "../../features/plans";
-import { DashboardLayout } from "../../shared/components/DashboardLayout";
+import { NewPlanFab } from "@/features/plans";
+import { DashboardLayout } from "@/shared/components/DashboardLayout";
 
 //? Placeholder: se reemplaza en HU-09 (mis planes)
 const MyPlansPage = () => (

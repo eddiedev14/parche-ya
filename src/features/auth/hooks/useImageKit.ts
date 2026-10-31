@@ -1,6 +1,6 @@
 import { upload } from "@imagekit/react";
-import { getImageKitAuth } from "../services/imageKit.service";
-import { getUserId } from "../../../shared/firebase/helpers/auth.helper";
+import { getImageKitAuth } from "@/features/auth/services/imageKit.service";
+import { getUserId } from "@/shared/firebase/helpers/auth.helper";
 
 export const useImageKit = () => {
   const uploadAvatar = async (file: File) => {

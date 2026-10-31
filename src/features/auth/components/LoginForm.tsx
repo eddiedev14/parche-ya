@@ -1,8 +1,8 @@
 import { IonButton } from "@ionic/react";
 
-import { Input } from "../../../shared/components/Input";
-import { PasswordInput } from "../../../shared/components/PasswordInput";
-import { useLoginForm } from "../hooks/useLoginForm";
+import { Input } from "@/shared/components/Input";
+import { PasswordInput } from "@/shared/components/PasswordInput";
+import { useLoginForm } from "@/features/auth/hooks/useLoginForm";
 
 export const LoginForm = () => {
   const { form } = useLoginForm();

@@ -8,10 +8,10 @@ import {
   timeOutline,
 } from "ionicons/icons";
 
-import { Avatar } from "../../shared/components/Avatar";
-import { PlanCard } from "../../shared/components/PlanCard";
-import { getCategory } from "../../shared/helpers/constants";
-import type { PlanDoc } from "../../shared/types/plan.types";
+import { Avatar } from "@/shared/components/Avatar";
+import { PlanCard } from "@/shared/components/PlanCard";
+import { getCategory } from "@/shared/helpers/constants";
+import type { PlanDoc } from "@/shared/types/plan.types";
 
 interface PinProps {
   color: string;

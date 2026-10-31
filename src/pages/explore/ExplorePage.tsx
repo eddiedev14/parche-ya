@@ -1,5 +1,5 @@
-import { NewPlanFab } from "../../features/plans";
-import { DashboardLayout } from "../../shared/components/DashboardLayout";
+import { NewPlanFab } from "@/features/plans";
+import { DashboardLayout } from "@/shared/components/DashboardLayout";
 
 const ExplorePage = () => {
   return (

@@ -1,8 +1,8 @@
 import { IonButton, IonChip, IonContent, IonPage } from "@ionic/react";
 import { useNavigate } from "react-router-dom";
 
-import { Logo } from "../../shared/components/Logo";
-import { ROUTES } from "../../router/routes";
+import { Logo } from "@/shared/components/Logo";
+import { ROUTES } from "@/router/routes";
 import { WelcomeHero } from "./WelcomeHero";
 
 const HIGHLIGHTS = ["1 a 3 horas", "Cupo limitado", "Se borra solo"];

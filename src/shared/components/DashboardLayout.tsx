@@ -9,9 +9,9 @@ import {
   IonToolbar,
 } from "@ionic/react";
 
-import { useAuth } from "../../features/auth";
-import { ROUTES } from "../../router/routes";
-import { SIDEBAR_ITEMS } from "../helpers/constants";
+import { useAuth } from "@/features/auth";
+import { ROUTES } from "@/router/routes";
+import { SIDEBAR_ITEMS } from "@/shared/helpers/constants";
 import { Sidebar } from "./Sidebar";
 
 interface Props {
