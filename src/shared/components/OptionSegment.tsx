@@ -15,7 +15,11 @@ export const OptionSegment = ({ options, value, onChange }: Props) => (
     }}
   >
     {options.map((option) => (
-      <IonSegmentButton key={option.value} value={option.value}>
+      <IonSegmentButton
+        key={option.value}
+        value={option.value}
+        className="min-h-12 [--padding-bottom:12px] [--padding-top:12px]"
+      >
         {option.label}
       </IonSegmentButton>
     ))}

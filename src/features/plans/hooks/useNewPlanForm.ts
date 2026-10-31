@@ -10,7 +10,8 @@ export const useNewPlanForm = () => {
   const form = useForm({
     initialValues: EMPTY_NEW_PLAN,
     validate: validateNewPlan,
-    onSubmit: () => {
+    onSubmit: (values) => {
+      console.log(values);
       alert("Nuevo plan creado!");
     },
   });
