@@ -10,6 +10,9 @@ import {
   restaurantOutline,
 } from "ionicons/icons";
 
+//* Pestañas de la barra inferior
+export const TAB_ITEMS = [...SIDEBAR_ITEMS];
+
 //* Categorías de plan (catálogo fijo).
 export const CATEGORIES = [
   {

@@ -7,8 +7,6 @@ export const ROUTES = {
   explore: "/tabs/explore",
   map: "/tabs/map",
   myPlans: "/tabs/my-plans",
-  profile: "/tabs/profile",
-  newPlan: "/plan/new",
   plan: (planId: string) => `/plan/${planId}`,
   planChat: (planId: string) => `/plan/${planId}/chat`,
 } as const;

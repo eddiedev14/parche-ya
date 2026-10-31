@@ -19,7 +19,7 @@ export const CategoryChip = ({
     <IonChip
       onClick={onClick}
       aria-pressed={selected}
-      className="m-0 shrink-0 cursor-pointer border"
+      className="m-0 shrink-0 cursor-pointer gap-2 border px-4 py-2"
       style={
         {
           "--background": selected ? color : "#FFFFFF",

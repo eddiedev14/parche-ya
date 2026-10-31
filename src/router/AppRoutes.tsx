@@ -7,7 +7,8 @@ import {
   LoadingOverlay,
   LoadingScreen,
 } from "../shared/components/LoadingScreen";
-import { AuthPage, ExplorePage, WelcomePage } from "../pages";
+import { AuthPage, WelcomePage } from "../pages";
+import TabsLayout from "./TabsLayout";
 import { GUEST_HOME_ROUTE, HOME_ROUTE, PUBLIC_ROUTES, ROUTES } from "./routes";
 
 const AppRoutes = () => {
@@ -42,8 +43,8 @@ const AppRoutes = () => {
         <Route path={ROUTES.login} element={<AuthPage />} />
         <Route path={ROUTES.register} element={<AuthPage isSignup />} />
 
-        {/* User Routes (rol user) */}
-        <Route path={ROUTES.explore} element={<ExplorePage />} />
+        {/* User Routes (rol user). Las 4 pestañas viven dentro de TabsLayout */}
+        <Route path="/tabs/*" element={<TabsLayout />} />
 
         <Route
           path="*"

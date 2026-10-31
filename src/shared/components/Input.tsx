@@ -39,7 +39,7 @@ export const Input = ({
         onIonInput={(event) => onChange(String(event.detail.value ?? ""))}
         aria-invalid={!!error}
         aria-describedby={error ? errorId : undefined}
-        className={`bg-surface rounded-control [--border-color:var(--color-line)] [--border-radius:12px] ${
+        className={`bg-surface rounded-control [--border-color:var(--color-line)] [--border-radius:12px] [--padding-start:16px] [--padding-end:16px] ${
           error ? "ion-invalid ion-touched" : ""
         } ${className}`}
       >
