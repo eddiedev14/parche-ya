@@ -34,7 +34,7 @@ export const LoginForm = () => {
         className="m-0"
         disabled={form.submitting}
       >
-        "Iniciar sesión"
+        Iniciar sesión
       </IonButton>
     </form>
   );
