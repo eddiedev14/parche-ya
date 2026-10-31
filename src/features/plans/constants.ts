@@ -21,3 +21,6 @@ export const CAPACITY = { min: 2, max: 20, initial: 4 };
 export const TITLE_LIMITS = { min: 5, max: 60 };
 export const LOCATION_NAME_LIMITS = { min: 3, max: 80 };
 export const DESCRIPTION_MAX = 280;
+
+// Ubicacion de la UAO
+export const DEFAULT_MAP_CENTER: [number, number] = [3.3536526, -76.5229863];

@@ -1,5 +1,6 @@
 import type { CategoryId } from "@/shared/helpers/constants";
 import type { FormErrors } from "@/shared/hooks/useForm";
+import { Coordinates } from "@/shared/types/plan.types";
 import {
   CAPACITY,
   DESCRIPTION_MAX,
@@ -14,8 +15,9 @@ export interface NewPlanValues {
   startInMinutes: number;
   durationHours: number;
   capacity: number;
-  //? Nombre escrito del lugar. Las coordenadas del mapa se agregan aparte
+  //? Nombre escrito del lugar
   locationName: string;
+  location: Coordinates | null;
 }
 
 export type NewPlanErrors = FormErrors<NewPlanValues>;
@@ -28,6 +30,7 @@ export const EMPTY_NEW_PLAN: NewPlanValues = {
   durationHours: 1,
   capacity: CAPACITY.initial,
   locationName: "",
+  location: null,
 };
 
 const validateTitle = (value: string) => {
@@ -57,4 +60,5 @@ export const validateNewPlan = (values: NewPlanValues): NewPlanErrors => ({
       ? `Máximo ${DESCRIPTION_MAX} caracteres`
       : undefined,
   locationName: validateLocationName(values.locationName),
+  location: values.location ? undefined : "Elige un lugar en el mapa",
 });

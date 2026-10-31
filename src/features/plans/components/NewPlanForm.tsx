@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   IonButton,
   IonButtons,
@@ -9,8 +10,14 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { addOutline, closeOutline, removeOutline } from "ionicons/icons";
+import {
+  addOutline,
+  closeOutline,
+  locationOutline,
+  removeOutline,
+} from "ionicons/icons";
 
+import { LocationPickerModal } from "./LocationPickerModal";
 import { CategoryChip } from "@/shared/components/CategoryChip";
 import { FieldGroup } from "@/shared/components/FieldGroup";
 import { Input } from "@/shared/components/Input";
@@ -25,18 +32,22 @@ import {
   START_OPTIONS,
 } from "@/features/plans/constants";
 import { useNewPlanForm } from "@/features/plans/hooks/useNewPlanForm";
+import { useCurrentLocation } from "@/shared/hooks/useCurrentLocation";
 
 interface Props {
   onClose: () => void;
 }
 
 export const NewPlanForm = ({ onClose }: Props) => {
+  const [pickerOpen, setPickerOpen] = useState(false);
   const { form } = useNewPlanForm();
+  const { loading, getCurrentLocation } = useCurrentLocation();
 
   const category = form.getControlProps("category");
   const startInMinutes = form.getControlProps("startInMinutes");
   const durationHours = form.getControlProps("durationHours");
   const capacity = form.getControlProps("capacity");
+  const location = form.getControlProps("location");
 
   return (
     <>
@@ -130,7 +141,34 @@ export const NewPlanForm = ({ onClose }: Props) => {
             {...form.getFieldProps("locationName")}
           />
 
-          {/* TODO(HU-05): aquí va la ubicación en el mapa (botón "Usar mi ubicación actual" + selector Leaflet) */}
+          <FieldGroup legend="Ubicación en el mapa">
+            <IonButton
+              fill="outline"
+              disabled={loading}
+              onClick={async () => {
+                const coordinates = await getCurrentLocation();
+                if (coordinates) location.onChange(coordinates);
+              }}
+            >
+              {loading ? (
+                <IonSpinner name="crescent" />
+              ) : (
+                "Usar mi ubicación actual"
+              )}
+            </IonButton>
+            <IonButton
+              size="small"
+              fill="outline"
+              onClick={() => setPickerOpen(true)}
+            >
+              <IonIcon slot="start" icon={locationOutline} />
+              {location.value ? "Cambiar ubicación" : "Elegir en el mapa"}
+            </IonButton>
+            {location.value && (
+              <p className="text-caption text-success">Ubicación elegida</p>
+            )}
+            <InputError message={location.error} />
+          </FieldGroup>
         </form>
       </IonContent>
 
@@ -146,6 +184,16 @@ export const NewPlanForm = ({ onClose }: Props) => {
           </IonButton>
         </IonToolbar>
       </IonFooter>
+
+      <LocationPickerModal
+        isOpen={pickerOpen}
+        initial={location.value}
+        onClose={() => setPickerOpen(false)}
+        onConfirm={(coordinates) => {
+          location.onChange(coordinates);
+          setPickerOpen(false);
+        }}
+      />
     </>
   );
 };
