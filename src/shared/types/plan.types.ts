@@ -10,6 +10,7 @@ export interface PlanLocation {
   lng: number;
   label: string;
 }
+export type Coordinates = Pick<PlanLocation, "lat" | "lng">;
 
 //* Documento plans/{planId} en Firestore
 export interface Plan {
