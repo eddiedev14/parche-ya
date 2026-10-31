@@ -1,10 +1,10 @@
-import { Toast } from "../../../shared/classes/Toast.class";
-import { useForm } from "../../../shared/hooks/useForm";
+import { Toast } from "@/shared/classes/Toast.class";
+import { useForm } from "@/shared/hooks/useForm";
 import {
   EMPTY_SIGNUP,
   SignupValues,
   validateSignup,
-} from "../validations/signup.validation";
+} from "@/features/auth/validations/signup.validation";
 import { useAuth } from "./useAuth";
 import { useImageKit } from "./useImageKit";
 

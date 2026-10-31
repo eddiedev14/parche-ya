@@ -1,11 +1,11 @@
-import type { CategoryId } from "../../../shared/helpers/constants";
-import type { FormErrors } from "../../../shared/hooks/useForm";
+import type { CategoryId } from "@/shared/helpers/constants";
+import type { FormErrors } from "@/shared/hooks/useForm";
 import {
   CAPACITY,
   DESCRIPTION_MAX,
   LOCATION_NAME_LIMITS,
   TITLE_LIMITS,
-} from "../constants";
+} from "@/features/plans/constants";
 
 export interface NewPlanValues {
   title: string;

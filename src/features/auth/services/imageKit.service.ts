@@ -1,6 +1,6 @@
-import { ImageKitAuthResponse } from "../types/imageKit.type";
-import { getFirebaseToken } from "../../../shared/firebase/helpers/auth.helper";
-import { imageKitApi } from "../api/imageKit.api";
+import { ImageKitAuthResponse } from "@/features/auth/types/imageKit.type";
+import { getFirebaseToken } from "@/shared/firebase/helpers/auth.helper";
+import { imageKitApi } from "@/features/auth/api/imageKit.api";
 
 // ? Function to request the image's authentication parameters from the backend
 const getImageKitAuth = async (): Promise<ImageKitAuthResponse> => {

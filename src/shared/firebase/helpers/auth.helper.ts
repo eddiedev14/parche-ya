@@ -1,5 +1,5 @@
 import { FirebaseError } from "firebase/app";
-import { auth } from "../config";
+import { auth } from "@/shared/firebase/config";
 
 // Función para obtener el mensaje de error de firebase a la hora de autenticarse
 const getAuthErrorMessage = (error: unknown): string => {

@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { Navigate, Route, useLocation, useNavigate } from "react-router-dom";
 import { IonRouterOutlet } from "@ionic/react";
 
-import { useAuth } from "../features/auth";
+import { useAuth } from "@/features/auth";
 import {
   LoadingOverlay,
   LoadingScreen,
-} from "../shared/components/LoadingScreen";
-import { AuthPage, WelcomePage } from "../pages";
+} from "@/shared/components/LoadingScreen";
+import { AuthPage, WelcomePage } from "@/pages";
 import TabsLayout from "./TabsLayout";
 import { GUEST_HOME_ROUTE, HOME_ROUTE, PUBLIC_ROUTES, ROUTES } from "./routes";
 

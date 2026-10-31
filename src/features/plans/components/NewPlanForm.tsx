@@ -11,20 +11,20 @@ import {
 } from "@ionic/react";
 import { addOutline, closeOutline, removeOutline } from "ionicons/icons";
 
-import { CategoryChip } from "../../../shared/components/CategoryChip";
-import { FieldGroup } from "../../../shared/components/FieldGroup";
-import { Input } from "../../../shared/components/Input";
-import { InputError } from "../../../shared/components/InputError";
-import { OptionSegment } from "../../../shared/components/OptionSegment";
-import { Textarea } from "../../../shared/components/Textarea";
-import { CATEGORIES } from "../../../shared/helpers/constants";
+import { CategoryChip } from "@/shared/components/CategoryChip";
+import { FieldGroup } from "@/shared/components/FieldGroup";
+import { Input } from "@/shared/components/Input";
+import { InputError } from "@/shared/components/InputError";
+import { OptionSegment } from "@/shared/components/OptionSegment";
+import { Textarea } from "@/shared/components/Textarea";
+import { CATEGORIES } from "@/shared/helpers/constants";
 import {
   CAPACITY,
   DESCRIPTION_MAX,
   DURATION_OPTIONS,
   START_OPTIONS,
-} from "../constants";
-import { useNewPlanForm } from "../hooks/useNewPlanForm";
+} from "@/features/plans/constants";
+import { useNewPlanForm } from "@/features/plans/hooks/useNewPlanForm";
 
 interface Props {
   onClose: () => void;

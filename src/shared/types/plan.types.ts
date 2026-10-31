@@ -1,6 +1,6 @@
 import type { Timestamp } from "firebase/firestore";
-import type { FirestoreDoc } from "../firebase/types/firestore.types";
-import type { CategoryId } from "../helpers/constants";
+import type { FirestoreDoc } from "@/shared/firebase/types/firestore.types";
+import type { CategoryId } from "@/shared/helpers/constants";
 
 //? Firestore devuelve Timestamp; Date y number facilitan mocks y pruebas
 export type PlanDate = Timestamp | Date | number;

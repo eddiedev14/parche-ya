@@ -9,10 +9,10 @@ import {
 } from "@ionic/react";
 import { useNavigate } from "react-router-dom";
 
-import { Logo } from "../../shared/components/Logo";
-import { ROUTES } from "../../router/routes";
-import { LoginForm } from "../../features/auth/components/LoginForm";
-import { SignupForm } from "../../features/auth/components/SignupForm";
+import { Logo } from "@/shared/components/Logo";
+import { ROUTES } from "@/router/routes";
+import { LoginForm } from "@/features/auth/components/LoginForm";
+import { SignupForm } from "@/features/auth/components/SignupForm";
 
 interface Props {
   isSignup?: boolean;

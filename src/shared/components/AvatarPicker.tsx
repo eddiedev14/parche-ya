@@ -8,7 +8,7 @@ import {
 } from "@capacitor/camera";
 import { cameraOutline, personOutline } from "ionicons/icons";
 
-import { webPathToFile } from "../helpers/file.helper";
+import { webPathToFile } from "@/shared/helpers/file.helper";
 import { InputError } from "./InputError";
 
 interface Props {

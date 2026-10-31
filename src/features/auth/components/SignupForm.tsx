@@ -1,6 +1,6 @@
 import { IonButton, IonSpinner } from "@ionic/react";
-import { AvatarPicker, Input, PasswordInput } from "../../../shared/components";
-import { useSignupForm } from "../hooks/useSignupForm";
+import { AvatarPicker, Input, PasswordInput } from "@/shared/components";
+import { useSignupForm } from "@/features/auth/hooks/useSignupForm";
 
 export const SignupForm = () => {
   const { form } = useSignupForm();
