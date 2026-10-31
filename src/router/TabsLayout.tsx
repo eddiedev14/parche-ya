@@ -20,7 +20,7 @@ const TabsLayout = () => (
       <Route path={ROUTES.myPlans} element={<MyPlansPage />} />
     </IonRouterOutlet>
 
-    <IonTabBar slot="bottom">
+    <IonTabBar slot="bottom" className="pb-[env(safe-area-inset-bottom)]">
       {TAB_ITEMS.map((item) => (
         <IonTabButton key={item.route} tab={item.route} href={item.route}>
           <IonIcon icon={item.icon} aria-hidden="true" />
