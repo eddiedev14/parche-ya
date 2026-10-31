@@ -1,0 +1,20 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "firebase-admin": "^14.5.0",
+    "imagekit": "^6.0.0"
+  },
+  "devDependencies": {
+    "@vercel/node": "^27.0.2"
+  }
+}
