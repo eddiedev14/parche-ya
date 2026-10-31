@@ -9,6 +9,7 @@ import "@fontsource/poppins/600.css";
 import "@fontsource/poppins/700.css";
 
 import { AuthProvider } from "./features/auth";
+import { PlansProvider } from "./features/plans/context/PlansContext";
 import { ToastProvider } from "./shared/components/ToastProvider";
 import App from "./App";
 
@@ -17,8 +18,10 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <ToastProvider />
-      <App />
+      <PlansProvider>
+        <ToastProvider />
+        <App />
+      </PlansProvider>
     </AuthProvider>
   </React.StrictMode>,
 );
