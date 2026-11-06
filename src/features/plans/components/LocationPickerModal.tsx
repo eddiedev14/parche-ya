@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   IonButton,
   IonButtons,
@@ -18,19 +18,15 @@ import {
 import { closeOutline } from "ionicons/icons";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import {
-  MapContainer,
-  Marker,
-  TileLayer,
-  useMap,
-  useMapEvents,
-} from "react-leaflet";
+import { MapContainer, Marker, useMapEvents } from "react-leaflet";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { Coordinates } from "@/shared/types/plan.types";
 import { DEFAULT_MAP_CENTER } from "@/features/plans/constants";
 import { PlaceResult, usePlaceSearch } from "@/shared/hooks/usePlaceSearch";
+import { FlyTo } from "@/shared/components/map/FlyTo";
+import { OsmTileLayer } from "@/shared/components/map/OsmTileLayer";
 
 //? Ícono propio del pin. Con Vite, el ícono por defecto de Leaflet antepone una ruta detectada del CSS
 //? a la URL de la imagen y la rompe, por eso se reemplaza completo
@@ -55,17 +51,6 @@ const ClickToPick = ({ onPick }: { onPick: (c: Coordinates) => void }) => {
   useMapEvents({
     click: ({ latlng }) => onPick({ lat: latlng.lat, lng: latlng.lng }),
   });
-  return null;
-};
-
-//? Sin UI. Cada vez que llega un `target` nuevo, mueve la cámara del mapa hasta ahí.
-const FlyTo = ({ target }: { target: Coordinates | null }) => {
-  const map = useMap();
-
-  useEffect(() => {
-    if (target) map.flyTo([target.lat, target.lng], 17);
-  }, [target, map]);
-
   return null;
 };
 
@@ -137,15 +122,12 @@ export const LocationPickerModal = ({
             zoom={16}
             className="isolate h-full w-full"
           >
-            <TileLayer
-              attribution="&copy; OpenStreetMap contributors"
-              url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+            <OsmTileLayer />
             {position && (
               <Marker position={[position.lat, position.lng]} icon={PIN_ICON} />
             )}
             <ClickToPick onPick={setPosition} />
-            <FlyTo target={flyTarget} />
+            <FlyTo target={flyTarget} zoom={17} />
           </MapContainer>
         )}
 

@@ -16,12 +16,14 @@ import { Sidebar } from "./Sidebar";
 interface Props {
   title: string;
   children: ReactNode;
+  //? false en pantallas que arrastran su propio contenido (el mapa), para que el scroll de Ionic no pelee con el gesto
+  scrollY?: boolean;
 }
 
 //? Mismo id para todas las pages: solo hay una montada a la vez dentro del outlet
 const CONTENT_ID = "dashboard-content";
 
-export const DashboardLayout = ({ title, children }: Props) => {
+export const DashboardLayout = ({ title, children, scrollY = true }: Props) => {
   const { user, logout } = useAuth();
 
   return (
@@ -43,7 +45,9 @@ export const DashboardLayout = ({ title, children }: Props) => {
             <IonTitle>{title}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent fullscreen>{children}</IonContent>
+        <IonContent fullscreen scrollY={scrollY}>
+          {children}
+        </IonContent>
       </IonPage>
     </>
   );
