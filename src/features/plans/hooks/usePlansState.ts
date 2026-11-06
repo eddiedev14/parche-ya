@@ -1,10 +1,35 @@
+import { useEffect, useMemo } from "react";
+import { useAuth } from "@/features/auth";
 import { useCollection } from "@/shared/firebase/hooks/useCollection";
 import { useRTDatabase } from "@/shared/firebase/hooks/useRTDatabase";
 import { Plan, PlanRoom } from "@/shared/types/plan.types";
 
 export const usePlansState = () => {
-  const { results: plans, isPending, add } = useCollection<Plan>("/plans");
-  const { setById: setRoom } = useRTDatabase<PlanRoom>("planRooms");
+  const { user } = useAuth();
+  const userId = user?.id;
+
+  const {
+    results: plans,
+    isPending,
+    add,
+    suscribe,
+  } = useCollection<Plan>("/plans");
+  //? Sin sesión el nodo va vacío y el hook no escucha nada (las reglas rechazarían el listener y no se reintenta al iniciar sesión)
+  const { results: rooms, setById: setRoom } = useRTDatabase<PlanRoom>(
+    userId ? "planRooms" : "",
+  );
+
+  //* Planes en vivo (Firestore), solo con sesión iniciada
+  useEffect(() => {
+    if (!userId) return;
+    return suscribe();
+  }, [userId, suscribe]);
+
+  //? Cupos ocupados por plan, en vivo desde planRooms/{planId}/count
+  const counts = useMemo(
+    () => Object.fromEntries(rooms.map((room) => [room.id, room.count ?? 0])),
+    [rooms],
+  );
 
   const createPlan = async (plan: Plan) => {
     const planId = await add(plan);
@@ -26,11 +51,13 @@ export const usePlansState = () => {
     });
 
     // Si falla la sala, el plan de Firestore queda sin sala (sin rollback), borrarlo o reintentar cuando se implemente unirse
-    if (!roomCreated) return "El plan se creó, pero falló la sala en tiempo real";
+    if (!roomCreated)
+      return "El plan se creó, pero falló la sala en tiempo real";
   };
 
   return {
     plans,
+    counts,
     isPending,
     createPlan,
   };

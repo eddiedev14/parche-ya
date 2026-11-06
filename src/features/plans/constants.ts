@@ -25,5 +25,8 @@ export const TITLE_LIMITS = { min: 5, max: 60 };
 export const LOCATION_NAME_LIMITS = { min: 3, max: 80 };
 export const DESCRIPTION_MAX = 280;
 
+//? Radio máximo (km) de los planes que se muestran en el mapa
+export const NEARBY_RADIUS_KM = 5;
+
 // Ubicacion de la UAO
 export const DEFAULT_MAP_CENTER: [number, number] = [3.3536526, -76.5229863];
