@@ -30,3 +30,18 @@ export interface Plan {
 }
 
 export type PlanDoc = FirestoreDoc<Plan>;
+
+export interface PlanParticipant {
+  id: string;
+  name: string;
+  //? Desnormalizado para pintar el avatar sin leer el perfil de cada participante
+  photoURL?: string;
+}
+
+//* Nodo planRooms/{planId} en RTDB: estado en vivo del plan
+export interface PlanRoom {
+  capacity: number;
+  count: number;
+  creatorId: string;
+  participants: PlanParticipant[];
+}
