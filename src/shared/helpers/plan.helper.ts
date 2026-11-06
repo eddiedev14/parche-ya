@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import type { Plan, PlanDate } from "@/shared/types/plan.types";
+import type { Coordinates, Plan, PlanDate } from "@/shared/types/plan.types";
 import type { PlanStatus } from "./constants";
 
 const MINUTE = 60_000;
@@ -64,6 +64,18 @@ export const formatPlanWhen = (startAt: PlanDate, now = Date.now()): string => {
   if (days === 0) return `Hoy ${time}`;
   if (days === 1) return `Mañana ${time}`;
   return `${dateFormatter.format(start)}, ${time}`;
+};
+
+//? Distancia en km en línea recta entre dos puntos (fórmula de Haversine)
+export const distanceKm = (a: Coordinates, b: Coordinates): number => {
+  const EARTH_RADIUS_KM = 6371;
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(b.lat - a.lat);
+  const dLng = toRad(b.lng - a.lng);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(h));
 };
 
 //? Devuelve "350 m" o "1,2 km"
