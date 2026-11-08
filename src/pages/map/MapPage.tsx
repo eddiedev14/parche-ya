@@ -28,14 +28,14 @@ const DEFAULT_ORIGIN: Coordinates = {
 
 const MapPage = () => {
   const navigate = useNavigate();
-  const { plans, counts } = usePlans();
+  //? category vive en el context para que Explorar y Mapa compartan el mismo filtro
+  const { plans, counts, category, setCategory } = usePlans();
   const { getCurrentLocation } = useCurrentLocation();
   const now = useNow();
 
   const [userLocation, setUserLocation] = useState<Coordinates | null>(null);
   //? El centro de Leaflet no es reactivo: el mapa se monta cuando ya se sabe si hay ubicación
   const [locating, setLocating] = useState(true);
-  const [category, setCategory] = useState<string>(CATEGORY_ALL.id);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
