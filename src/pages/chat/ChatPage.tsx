@@ -63,12 +63,11 @@ const ChatPage = () => {
       const isGrouped =
         !!previous &&
         previous.userId === message.userId &&
-        message.timestamp.toMillis() - previous.timestamp.toMillis() <
-          GROUP_WINDOW_MS;
+        message.createdAt - previous.createdAt < GROUP_WINDOW_MS;
 
       return (
         <MessageBubble
-          key={message.name} // * Reemplazar por la futura Id
+          key={message.id}
           message={message}
           isMyMessage={message.userId === user?.id}
           isGrouped={isGrouped}

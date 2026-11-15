@@ -16,10 +16,10 @@ export const MessageBubble = ({
   isMyMessage,
   isGrouped = false,
 }: Props) => {
-  const { name, photoUrl, text, timestamp } = message;
+  const { name, photoUrl, text, createdAt } = message;
   const time = (
     <span className="text-caption text-muted mt-0.5">
-      {formatClock(timestamp.toMillis())}
+      {formatClock(createdAt)}
     </span>
   );
 
