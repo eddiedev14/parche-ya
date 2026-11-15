@@ -78,6 +78,7 @@ export const useCollection = <T extends DocumentData>(table: string) => {
     (
       id: string,
       callback: (doc: FirestoreDoc<T> | null) => void,
+      onError?: () => void,
     ): Unsubscribe => {
       setIsPending(true);
 
@@ -94,6 +95,7 @@ export const useCollection = <T extends DocumentData>(table: string) => {
         },
         () => {
           setIsPending(false);
+          onError?.();
         },
       );
 
