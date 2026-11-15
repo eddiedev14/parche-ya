@@ -52,3 +52,9 @@ export const DEFAULT_FILTERS: PlanFilters = {
   category: "todos",
   radiusKm: DEFAULT_RADIUS_KM,
 };
+
+//* Mis planes
+
+//? Tarjetas que se agregan cada vez que el scroll llega al final
+export const MY_PLANS_PAGE_SIZE = 10;
+export const MY_PLANS_HISTORY_LIMIT = 20;

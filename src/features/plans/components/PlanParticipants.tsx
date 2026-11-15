@@ -30,8 +30,8 @@ export const PlanParticipants = ({
 
     <IonList className="rounded-card mt-2 overflow-hidden py-0">
       {participants.map((participant) => (
-        <IonItem key={participant.id} lines="none">
-          <div slot="start">
+        <IonItem key={participant.id} lines="none" className="px-3 py-2">
+          <div slot="start" className="mr-3 h-8 w-8 shrink-0">
             <Avatar
               url={participant.photoURL}
               name={participant.name}
