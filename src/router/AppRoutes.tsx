@@ -7,7 +7,7 @@ import {
   LoadingOverlay,
   LoadingScreen,
 } from "@/shared/components/LoadingScreen";
-import { AuthPage, PlanDetailPage, WelcomePage } from "@/pages";
+import { AuthPage, ChatPage, PlanDetailPage, WelcomePage } from "@/pages";
 import TabsLayout from "./TabsLayout";
 import { GUEST_HOME_ROUTE, HOME_ROUTE, PUBLIC_ROUTES, ROUTES } from "./routes";
 
@@ -48,6 +48,7 @@ const AppRoutes = () => {
 
         {/* Fuera de las tabs: no muestra la barra inferior */}
         <Route path={ROUTES.plan(":planId")} element={<PlanDetailPage />} />
+        <Route path={ROUTES.planChat(":planId")} element={<ChatPage />} />
 
         <Route
           path="*"

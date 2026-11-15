@@ -38,7 +38,9 @@ export const PlanParticipants = ({
               size={32}
             />
           </div>
-          <IonLabel className="text-body text-ink">{participant.name}</IonLabel>
+          <IonLabel className="text-body text-ink ml-2">
+            {participant.name}
+          </IonLabel>
           {participant.id === creatorId && (
             <span slot="end" className="text-caption text-muted">
               Organizador
