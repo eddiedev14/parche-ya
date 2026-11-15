@@ -14,3 +14,11 @@ export interface PlanFilters {
 
 //? null cuando no tenemos la ubicación del usuario
 export type PlanWithDistance = PlanDoc & { distanceKm: number | null };
+
+export type MyPlansSegment = "active" | "history";
+
+//? Plan de Mis planes con lo que necesita su tarjeta
+export type MyPlan = PlanWithDistance & {
+  isCreator: boolean;
+  canOpenChat: boolean;
+};
