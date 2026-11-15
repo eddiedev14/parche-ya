@@ -17,6 +17,9 @@ const dateFormatter = new Intl.DateTimeFormat("es-CO", {
 
 const startOfDay = (ms: number) => new Date(ms).setHours(0, 0, 0, 0);
 
+//? "6:30 p. m." — la hora de un mensaje del chat
+export const formatClock = (ms: number): string => timeFormatter.format(ms);
+
 //? Minutos desde ahora (setMinutes solo reemplazaba el minuto de la hora actual)
 export const minutesToTimestamp = (minutes: number): Timestamp =>
   Timestamp.fromMillis(Date.now() + minutes * MINUTE);
