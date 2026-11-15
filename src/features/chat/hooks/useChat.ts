@@ -30,7 +30,6 @@ export const useChat = () => {
 
   const isOver = status === "terminado" || status === "cancelado";
 
-  // * shortcut: solo agrega el mensaje en memoria; reemplazar por el envío real
   const handleSend = async (text: string) => {
     if (!user) return;
 
