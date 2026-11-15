@@ -1,3 +1,5 @@
+import type { PlanFilters, RadiusKm } from "./types/plans.types";
+
 //* Opciones y límites del formulario de Nuevo plan
 
 //? Valor = minutos desde ahora hasta que empieza el plan
@@ -30,3 +32,23 @@ export const NEARBY_RADIUS_KM = 5;
 
 // Ubicacion de la UAO
 export const DEFAULT_MAP_CENTER: [number, number] = [3.3536526, -76.5229863];
+
+//* Filtros de Explorar
+
+export const RADIUS_OPTIONS: { value: RadiusKm; label: string }[] = [
+  { value: 1, label: "1 km" },
+  { value: 3, label: "3 km" },
+  { value: 5, label: "5 km" },
+  { value: 10, label: "10 km" },
+  { value: null, label: "Sin límite" },
+];
+
+export const DEFAULT_RADIUS_KM: RadiusKm = 5;
+
+//? Clave de localStorage donde se recuerdan la categoría y el radio
+export const FILTERS_STORAGE_KEY = "parcheya:filters";
+
+export const DEFAULT_FILTERS: PlanFilters = {
+  category: "todos",
+  radiusKm: DEFAULT_RADIUS_KM,
+};

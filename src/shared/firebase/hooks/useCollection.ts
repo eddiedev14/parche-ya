@@ -25,6 +25,8 @@ import type { FirestoreDoc } from "@/shared/firebase/types/firestore.types";
 export const useCollection = <T extends DocumentData>(table: string) => {
   const [results, setResults] = useState<FirestoreDoc<T>[]>([]);
   const [isPending, setIsPending] = useState(false);
+  //? Solo lo llena suscribe: así la page puede mostrar el estado de error y reintentar
+  const [error, setError] = useState<string | null>(null);
 
   const buildQuery = useCallback(
     (constraints: QueryConstraint[] = []): Query => {
@@ -37,6 +39,7 @@ export const useCollection = <T extends DocumentData>(table: string) => {
   const suscribe = useCallback(
     (constraints: QueryConstraint[] = []): Unsubscribe => {
       setIsPending(true);
+      setError(null);
 
       try {
         // Se hace una busqueda sobre la colección indicada
@@ -55,17 +58,19 @@ export const useCollection = <T extends DocumentData>(table: string) => {
             setIsPending(false);
           },
           () => {
+            setError(`Error al consultar ${table}`);
             setIsPending(false);
           },
         );
 
         return unsubscribe;
       } catch {
+        setError(`Error al consultar ${table}`);
         setIsPending(false);
         return () => {};
       }
     },
-    [buildQuery],
+    [buildQuery, table],
   );
 
   //* 1. R -> READ by id (real-time)
@@ -215,6 +220,7 @@ export const useCollection = <T extends DocumentData>(table: string) => {
   return {
     results,
     isPending,
+    error,
     suscribe,
     suscribeById,
     find,

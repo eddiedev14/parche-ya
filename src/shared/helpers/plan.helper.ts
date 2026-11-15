@@ -66,6 +66,35 @@ export const formatPlanWhen = (startAt: PlanDate, now = Date.now()): string => {
   return `${dateFormatter.format(start)}, ${time}`;
 };
 
+//? Devuelve "Hoy 6:30 p. m. – 7:30 p. m.", "Mañana …" o "12 oct, …" (para el detalle del plan)
+export const formatPlanSchedule = (
+  startAt: PlanDate,
+  expiresAt: PlanDate,
+  now = Date.now(),
+): string => {
+  const start = toMillis(startAt);
+  const range = `${timeFormatter.format(start)} – ${timeFormatter.format(toMillis(expiresAt))}`;
+  const days = Math.round((startOfDay(start) - startOfDay(now)) / 86_400_000);
+
+  if (days === 0) return `Hoy ${range}`;
+  if (days === 1) return `Mañana ${range}`;
+  return `${dateFormatter.format(start)}, ${range}`;
+};
+
+//? Devuelve "En 25 min" o "En 1 h 10 min". A diferencia de formatPlanWhen, sirve también para más de una hora
+export const formatTimeUntil = (
+  startAt: PlanDate,
+  now = Date.now(),
+): string => {
+  const minutes = Math.ceil((toMillis(startAt) - now) / MINUTE);
+  if (minutes <= 0) return "Ahora";
+  if (minutes < 60) return `En ${minutes} min`;
+
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return rest === 0 ? `En ${hours} h` : `En ${hours} h ${rest} min`;
+};
+
 //? Distancia en km en línea recta entre dos puntos (fórmula de Haversine)
 export const distanceKm = (a: Coordinates, b: Coordinates): number => {
   const EARTH_RADIUS_KM = 6371;
