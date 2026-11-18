@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ref, remove, runTransaction, set } from "firebase/database";
 import { useAuth } from "@/features/auth";
+import { notifyUserJoined } from "@/features/notifications";
 import { Toast } from "@/shared/classes/Toast.class";
 import { rtdb } from "@/shared/firebase/config";
 import type { PlanStatus } from "@/shared/helpers/constants";
@@ -75,6 +76,8 @@ export const usePlanMembership = ({
       }
 
       await set(ref(rtdb, `userPlans/${user.id}/${planId}`), true);
+      //? Sin await: el aviso al organizador no debe frenar ni romper la unión
+      notifyUserJoined({ planId });
     } catch {
       Toast.error(JOIN_ERROR);
     } finally {

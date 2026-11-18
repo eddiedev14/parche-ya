@@ -1,8 +1,11 @@
 //* React
 import { useEffect, useState } from "react";
 
+//* Capacitor
+import { Capacitor } from "@capacitor/core";
+
 //* Firebase
-import { auth, db } from "../../../shared/firebase/config";
+import { auth, db } from "@/shared/firebase/config";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -10,21 +13,29 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 // * Types & utils
-import type { AuthUser, User, UserRole } from "../types/auth.types";
-import { useCollection } from "../../../shared/firebase/hooks/useCollection";
-import { SignupValues as UserRegister } from "../validations/signup.validation";
-import { getAuthErrorMessage } from "../../../shared/firebase/helpers/auth.helper";
+import type {
+  AuthUser,
+  User,
+  UserRole,
+} from "@/features/auth/types/auth.types";
+import { useCollection } from "@/shared/firebase/hooks/useCollection";
+import { SignupValues as UserRegister } from "@/features/auth/validations/signup.validation";
+import { getAuthErrorMessage } from "@/shared/firebase/helpers/auth.helper";
 
-//? El rol vive en users/{uid}. Si el documento no existe todavía (registro en curso) o falla la lectura, se asume "user"
-const getUserRole = async (uid: string): Promise<UserRole> => {
+//? El rol y el displayName viven en users/{uid} (Auth no guarda el nombre al registrar). Si el documento no existe todavía (registro en curso) o falla la lectura, se asume rol "user" y se conserva el nombre de Auth
+const getUserProfile = async (
+  uid: string,
+): Promise<{ role: UserRole; displayName?: string }> => {
   try {
     const snapshot = await getDoc(doc(db, "users", uid));
-    return snapshot.exists() ? (snapshot.data() as User).role : "user";
+    if (!snapshot.exists()) return { role: "user" };
+    const { role, displayName } = snapshot.data() as User;
+    return { role, displayName };
   } catch {
-    return "user";
+    return { role: "user" };
   }
 };
 
@@ -42,6 +53,17 @@ const login = async (
 };
 
 const logout = async (): Promise<string | null> => {
+  //? Sin token, el siguiente usuario de este celular no recibe avisos ajenos. Solo en el celular:
+  //? cerrar sesión en la web no debe apagar los avisos del teléfono
+  const uid = auth.currentUser?.uid;
+  if (uid && Capacitor.isNativePlatform()) {
+    try {
+      await updateDoc(doc(db, "users", uid), { fcmToken: null });
+    } catch {
+      //? Si falla, igual se cierra la sesión
+    }
+  }
+
   try {
     await signOut(auth);
     return null;
@@ -81,8 +103,12 @@ export default function useAuthState() {
       });
       setUserLoading(false);
 
-      const role = await getUserRole(fbUser.uid);
-      setUser((prev) => (prev?.id === fbUser.uid ? { ...prev, role } : prev));
+      const { role, displayName } = await getUserProfile(fbUser.uid);
+      setUser((prev) =>
+        prev?.id === fbUser.uid
+          ? { ...prev, role, displayName: displayName || prev.displayName }
+          : prev,
+      );
     });
 
     return () => {
@@ -116,6 +142,12 @@ export default function useAuthState() {
         role: "user",
       });
       if (!created) error = "No pudimos guardar tu perfil. Inténtalo de nuevo.";
+
+      //? onAuthStateChanged ya corrió con displayName vacío (el documento aún no existía), se sincroniza a mano
+      else
+        setUser((prev) =>
+          prev?.id === userId ? { ...prev, displayName } : prev,
+        );
     } catch (err) {
       error = getAuthErrorMessage(err);
     }

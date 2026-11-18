@@ -3,6 +3,7 @@ import { Navigate, Route, useLocation, useNavigate } from "react-router-dom";
 import { IonRouterOutlet } from "@ionic/react";
 
 import { useAuth } from "@/features/auth";
+import { usePushRegistration } from "@/features/notifications";
 import {
   LoadingOverlay,
   LoadingScreen,
@@ -15,6 +16,7 @@ const AppRoutes = () => {
   const { user, userLoading, registering } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  usePushRegistration();
 
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
   //? Durante el registro ya hay sesión pero la foto aún se está subiendo: se espera a que termine para redirigir
