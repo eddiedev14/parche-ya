@@ -11,6 +11,7 @@ import {
   useExploreFeed,
   usePlans,
 } from "@/features/plans";
+import { PushPermissionAlert } from "@/features/notifications";
 import { DashboardLayout } from "@/shared/components/DashboardLayout";
 import { EmptyState } from "@/shared/components/EmptyState";
 import { PlanCard } from "@/shared/components/PlanCard";
@@ -104,6 +105,7 @@ const ExplorePage = () => {
         isOpen={isNewPlanOpen}
         onClose={() => setIsNewPlanOpen(false)}
       />
+      <PushPermissionAlert />
     </DashboardLayout>
   );
 };
