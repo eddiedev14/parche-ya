@@ -1,6 +1,9 @@
 //* React
 import { useEffect, useState } from "react";
 
+//* Capacitor
+import { Capacitor } from "@capacitor/core";
+
 //* Firebase
 import { auth, db } from "@/shared/firebase/config";
 import {
@@ -10,7 +13,7 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 // * Types & utils
 import type {
@@ -50,6 +53,17 @@ const login = async (
 };
 
 const logout = async (): Promise<string | null> => {
+  //? Sin token, el siguiente usuario de este celular no recibe avisos ajenos. Solo en el celular:
+  //? cerrar sesión en la web no debe apagar los avisos del teléfono
+  const uid = auth.currentUser?.uid;
+  if (uid && Capacitor.isNativePlatform()) {
+    try {
+      await updateDoc(doc(db, "users", uid), { fcmToken: null });
+    } catch {
+      //? Si falla, igual se cierra la sesión
+    }
+  }
+
   try {
     await signOut(auth);
     return null;
@@ -131,7 +145,9 @@ export default function useAuthState() {
 
       //? onAuthStateChanged ya corrió con displayName vacío (el documento aún no existía), se sincroniza a mano
       else
-        setUser((prev) => (prev?.id === userId ? { ...prev, displayName } : prev));
+        setUser((prev) =>
+          prev?.id === userId ? { ...prev, displayName } : prev,
+        );
     } catch (err) {
       error = getAuthErrorMessage(err);
     }

@@ -4,6 +4,11 @@ const config: CapacitorConfig = {
   appId: "com.parcheya.app",
   appName: "ParcheYa",
   webDir: "dist",
+  plugins: {
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"],
+    },
+  },
 };
 
 export default config;
