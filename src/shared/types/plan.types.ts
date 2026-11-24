@@ -1,6 +1,6 @@
 import type { Timestamp } from "firebase/firestore";
-import type { FirestoreDoc } from "../firebase/types/firestore.types";
-import type { CategoryId } from "../helpers/constants";
+import type { FirestoreDoc } from "@/shared/firebase/types/firestore.types";
+import type { CategoryId } from "@/shared/helpers/constants";
 
 //? Firestore devuelve Timestamp; Date y number facilitan mocks y pruebas
 export type PlanDate = Timestamp | Date | number;
@@ -10,6 +10,7 @@ export interface PlanLocation {
   lng: number;
   label: string;
 }
+export type Coordinates = Pick<PlanLocation, "lat" | "lng">;
 
 //* Documento plans/{planId} en Firestore
 export interface Plan {
@@ -29,3 +30,20 @@ export interface Plan {
 }
 
 export type PlanDoc = FirestoreDoc<Plan>;
+
+export interface PlanParticipant {
+  id: string;
+  name: string;
+  //? Desnormalizado para pintar el avatar sin leer el perfil de cada participante
+  photoURL?: string;
+}
+
+//* Nodo planRooms/{planId} en RTDB: estado en vivo del plan
+export interface PlanRoom {
+  capacity: number;
+  count: number;
+  creatorId: string;
+  //? Mapa por uid ({ [uid]: participante }), no un arreglo: así las reglas de RTDB pueden comprobar
+  //? "¿este usuario está en el plan?" con participants/{uid} y limitar a cada quien a su propia entrada
+  participants: Record<string, PlanParticipant>;
+}

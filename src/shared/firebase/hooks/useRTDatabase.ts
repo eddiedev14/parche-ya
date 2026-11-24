@@ -10,8 +10,8 @@ import {
   update,
   type DatabaseReference,
 } from "firebase/database";
-import { rtdb } from "../config";
-import type { RTDoc } from "../types/firestore.types";
+import { rtdb } from "@/shared/firebase/config";
+import type { RTDoc } from "@/shared/firebase/types/firestore.types";
 
 //* Colección: el nodo contiene hijos con id, por ejemplo "chats/{planId}" -> { msg1: {...}, msg2: {...} }
 export const useRTDatabase = <T>(node: string) => {
@@ -235,6 +235,11 @@ export const useRTValue = <T>(path: string) => {
   //* States
   const [value, setValue] = useState<T | null>(null);
   const [isPending, setIsPending] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  //? Si el listener falla, Firebase lo cancela: cambiar retryKey lo vuelve a abrir
+  const [retryKey, setRetryKey] = useState(0);
+  const retry = useCallback(() => setRetryKey((key) => key + 1), []);
 
   //* Effects (onValue)
   useEffect(() => {
@@ -246,6 +251,7 @@ export const useRTValue = <T>(path: string) => {
     }
 
     setIsPending(true);
+    setError(null);
 
     const unsubscribe = onValue(
       ref(rtdb, path),
@@ -254,12 +260,13 @@ export const useRTValue = <T>(path: string) => {
         setIsPending(false);
       },
       () => {
+        setError(`Error al consultar ${path}`);
         setIsPending(false);
       },
     );
 
     return () => unsubscribe(); // limpiar listener al desmontar
-  }, [path]);
+  }, [path, retryKey]);
 
-  return { value, isPending };
+  return { value, isPending, error, retry };
 };

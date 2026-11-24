@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { IonBadge } from "@ionic/react";
-import { PLAN_STATUSES, type PlanStatus } from "../helpers/constants";
+import { PLAN_STATUSES, type PlanStatus } from "@/shared/helpers/constants";
 
 interface Props {
   status: PlanStatus;

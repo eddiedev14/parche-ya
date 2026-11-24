@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, type ReactNode } from "react";
-import useAuthState from "../hooks/useAuthState";
+import useAuthState from "@/features/auth/hooks/useAuthState";
 
 interface IProvider {
   children: ReactNode;

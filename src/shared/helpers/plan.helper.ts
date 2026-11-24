@@ -1,4 +1,5 @@
-import type { Plan, PlanDate } from "../types/plan.types";
+import { Timestamp } from "firebase/firestore";
+import type { Coordinates, Plan, PlanDate } from "@/shared/types/plan.types";
 import type { PlanStatus } from "./constants";
 
 const MINUTE = 60_000;
@@ -15,6 +16,21 @@ const dateFormatter = new Intl.DateTimeFormat("es-CO", {
 });
 
 const startOfDay = (ms: number) => new Date(ms).setHours(0, 0, 0, 0);
+
+//? "6:30 p. m." — la hora de un mensaje del chat
+export const formatClock = (ms: number): string => timeFormatter.format(ms);
+
+//? Minutos desde ahora (setMinutes solo reemplazaba el minuto de la hora actual)
+export const minutesToTimestamp = (minutes: number): Timestamp =>
+  Timestamp.fromMillis(Date.now() + minutes * MINUTE);
+
+//? "HH:MM" de hoy -> minutos desde ahora (negativo si ya pasó)
+//? shortcut: no pasa a mañana si la hora ya pasó, cambiar si hay planes de madrugada
+export const minutesUntilTime = (time: string, now = Date.now()): number => {
+  const [hours, minutes] = time.split(":").map(Number);
+  const target = new Date(now).setHours(hours, minutes, 0, 0);
+  return (target - now) / MINUTE;
+};
 
 export const toMillis = (date: PlanDate): number => {
   if (typeof date === "number") return date;
@@ -51,6 +67,47 @@ export const formatPlanWhen = (startAt: PlanDate, now = Date.now()): string => {
   if (days === 0) return `Hoy ${time}`;
   if (days === 1) return `Mañana ${time}`;
   return `${dateFormatter.format(start)}, ${time}`;
+};
+
+//? Devuelve "Hoy 6:30 p. m. – 7:30 p. m.", "Mañana …" o "12 oct, …" (para el detalle del plan)
+export const formatPlanSchedule = (
+  startAt: PlanDate,
+  expiresAt: PlanDate,
+  now = Date.now(),
+): string => {
+  const start = toMillis(startAt);
+  const range = `${timeFormatter.format(start)} – ${timeFormatter.format(toMillis(expiresAt))}`;
+  const days = Math.round((startOfDay(start) - startOfDay(now)) / 86_400_000);
+
+  if (days === 0) return `Hoy ${range}`;
+  if (days === 1) return `Mañana ${range}`;
+  return `${dateFormatter.format(start)}, ${range}`;
+};
+
+//? Devuelve "En 25 min" o "En 1 h 10 min". A diferencia de formatPlanWhen, sirve también para más de una hora
+export const formatTimeUntil = (
+  startAt: PlanDate,
+  now = Date.now(),
+): string => {
+  const minutes = Math.ceil((toMillis(startAt) - now) / MINUTE);
+  if (minutes <= 0) return "Ahora";
+  if (minutes < 60) return `En ${minutes} min`;
+
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return rest === 0 ? `En ${hours} h` : `En ${hours} h ${rest} min`;
+};
+
+//? Distancia en km en línea recta entre dos puntos (fórmula de Haversine)
+export const distanceKm = (a: Coordinates, b: Coordinates): number => {
+  const EARTH_RADIUS_KM = 6371;
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(b.lat - a.lat);
+  const dLng = toRad(b.lng - a.lng);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(h));
 };
 
 //? Devuelve "350 m" o "1,2 km"

@@ -1,25 +1,69 @@
 //* React
 import { useEffect, useState } from "react";
 
+//* Capacitor
+import { Capacitor } from "@capacitor/core";
+
 //* Firebase
-import { auth, db } from "../../../shared/firebase/config";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/shared/firebase/config";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 // * Types & utils
-import type { AuthUser, User, UserRole } from "../types/auth.types";
+import type {
+  AuthUser,
+  User,
+  UserRole,
+} from "@/features/auth/types/auth.types";
+import { useCollection } from "@/shared/firebase/hooks/useCollection";
+import { SignupValues as UserRegister } from "@/features/auth/validations/signup.validation";
+import { getAuthErrorMessage } from "@/shared/firebase/helpers/auth.helper";
 
-//? El rol vive en users/{uid}. Si el documento no existe todavía (registro en curso) o falla la lectura, se asume "user"
-const getUserRole = async (uid: string): Promise<UserRole> => {
+//? El rol y el displayName viven en users/{uid} (Auth no guarda el nombre al registrar). Si el documento no existe todavía (registro en curso) o falla la lectura, se asume rol "user" y se conserva el nombre de Auth
+const getUserProfile = async (
+  uid: string,
+): Promise<{ role: UserRole; displayName?: string }> => {
   try {
     const snapshot = await getDoc(doc(db, "users", uid));
-    return snapshot.exists() ? (snapshot.data() as User).role : "user";
+    if (!snapshot.exists()) return { role: "user" };
+    const { role, displayName } = snapshot.data() as User;
+    return { role, displayName };
   } catch {
-    return "user";
+    return { role: "user" };
+  }
+};
+
+//? Devuelve null si todo salió bien, o el mensaje de error
+const login = async (
+  email: string,
+  password: string,
+): Promise<string | null> => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    return null;
+  } catch (error) {
+    return getAuthErrorMessage(error);
   }
 };
 
 const logout = async (): Promise<string | null> => {
+  //? Sin token, el siguiente usuario de este celular no recibe avisos ajenos. Solo en el celular:
+  //? cerrar sesión en la web no debe apagar los avisos del teléfono
+  const uid = auth.currentUser?.uid;
+  if (uid && Capacitor.isNativePlatform()) {
+    try {
+      await updateDoc(doc(db, "users", uid), { fcmToken: null });
+    } catch {
+      //? Si falla, igual se cierra la sesión
+    }
+  }
+
   try {
     await signOut(auth);
     return null;
@@ -32,6 +76,11 @@ export default function useAuthState() {
   //* States
   const [user, setUser] = useState<AuthUser | null>(null);
   const [userLoading, setUserLoading] = useState(true);
+  //? Mientras dura el registro (cuenta + foto) AppRoutes no redirige, aunque Firebase ya haya iniciado sesión
+  const [registering, setRegistering] = useState(false);
+
+  //* Firestore collection
+  const { setById, update } = useCollection<User>("users");
 
   //* Effects
   useEffect(() => {
@@ -44,6 +93,7 @@ export default function useAuthState() {
       }
 
       //? Firebase Auth es la fuente de verdad de la sesión; el rol se completa después sin bloquear la carga
+      setUserLoading(true);
       setUser({
         id: fbUser.uid,
         email: fbUser.email ?? "",
@@ -53,8 +103,12 @@ export default function useAuthState() {
       });
       setUserLoading(false);
 
-      const role = await getUserRole(fbUser.uid);
-      setUser((prev) => (prev?.id === fbUser.uid ? { ...prev, role } : prev));
+      const { role, displayName } = await getUserProfile(fbUser.uid);
+      setUser((prev) =>
+        prev?.id === fbUser.uid
+          ? { ...prev, role, displayName: displayName || prev.displayName }
+          : prev,
+      );
     });
 
     return () => {
@@ -62,9 +116,71 @@ export default function useAuthState() {
     };
   }, []);
 
+  //* Functions
+  const registerWithEmailAndPassword = async (
+    user: Omit<UserRegister, "photo" | "confirmPassword">,
+  ): Promise<string | null> => {
+    let error: string | null = null;
+    const { name: displayName, bio, email, password } = user;
+
+    // Proceed with the register in Firebase Auth
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      //? La foto se sube después del registro (ImageKit exige sesión) y actualiza este documento con updateUserPhoto
+      const userId = userCredential.user.uid;
+      const created = await setById(userId, {
+        displayName,
+        email,
+        bio,
+        photoUrl: "",
+        fcmToken: null,
+        role: "user",
+      });
+      if (!created) error = "No pudimos guardar tu perfil. Inténtalo de nuevo.";
+
+      //? onAuthStateChanged ya corrió con displayName vacío (el documento aún no existía), se sincroniza a mano
+      else
+        setUser((prev) =>
+          prev?.id === userId ? { ...prev, displayName } : prev,
+        );
+    } catch (err) {
+      error = getAuthErrorMessage(err);
+    }
+
+    return error;
+  };
+
+  //? Requiere sesión iniciada: se llama justo después de registrarse, con la URL devuelta por ImageKit
+  const updateUserPhoto = async (photoUrl: string): Promise<string | null> => {
+    const fbUser = auth.currentUser;
+    if (!fbUser) return "No hay una sesión iniciada.";
+
+    const updated = await update(fbUser.uid, { photoUrl });
+    if (!updated) return "No pudimos guardar tu foto de perfil.";
+
+    //? updateProfile no dispara onAuthStateChanged, por eso se sincroniza el estado local a mano
+    try {
+      await updateProfile(fbUser, { photoURL: photoUrl });
+    } catch {
+      //? El documento de Firestore ya quedó actualizado; el photoURL de Auth es secundario
+    }
+    setUser((prev) => (prev?.id === fbUser.uid ? { ...prev, photoUrl } : prev));
+    return null;
+  };
+
   return {
     user,
     userLoading,
+    registering,
+    setRegistering,
+    registerWithEmailAndPassword,
+    updateUserPhoto,
+    login,
     logout,
   };
 }

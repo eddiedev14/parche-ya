@@ -1,6 +1,5 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { ToastContainer } from "react-toastify";
 
 /* Fuentes locales (funcionan sin internet) */
 import "@fontsource/inter/400.css";
@@ -10,6 +9,8 @@ import "@fontsource/poppins/600.css";
 import "@fontsource/poppins/700.css";
 
 import { AuthProvider } from "./features/auth";
+import { PlansProvider } from "./features/plans/context/PlansContext";
+import { ToastProvider } from "./shared/components/ToastProvider";
 import App from "./App";
 
 const container = document.getElementById("root");
@@ -17,8 +18,10 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <ToastContainer />
-      <App />
+      <PlansProvider>
+        <ToastProvider />
+        <App />
+      </PlansProvider>
     </AuthProvider>
   </React.StrictMode>,
 );

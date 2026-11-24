@@ -7,7 +7,6 @@ interface ImportMetaEnv {
   readonly VITE_FIREBASE_DATABASE_URL: string;
   readonly VITE_FIREBASE_APP_ID: string;
   readonly VITE_API_URL: string;
-  readonly VITE_IMAGEKIT_PUBLIC_KEY: string;
   readonly VITE_IMAGEKIT_URL_ENDPOINT: string;
 }
 
