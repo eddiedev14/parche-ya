@@ -16,8 +16,22 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    //? Las credenciales de firma viven en ~/.gradle/gradle.properties (fuera del repo). Sin ellas se genera una APK sin firmar
+    signingConfigs {
+        release {
+            if (project.hasProperty('PARCHEYA_STORE_FILE')) {
+                storeFile file(project.property('PARCHEYA_STORE_FILE'))
+                storePassword project.property('PARCHEYA_STORE_PASSWORD')
+                keyAlias project.property('PARCHEYA_KEY_ALIAS')
+                keyPassword project.property('PARCHEYA_KEY_PASSWORD')
+            }
+        }
+    }
     buildTypes {
         release {
+            if (project.hasProperty('PARCHEYA_STORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
