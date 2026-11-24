@@ -43,5 +43,7 @@ export interface PlanRoom {
   capacity: number;
   count: number;
   creatorId: string;
-  participants: PlanParticipant[];
+  //? Mapa por uid ({ [uid]: participante }), no un arreglo: así las reglas de RTDB pueden comprobar
+  //? "¿este usuario está en el plan?" con participants/{uid} y limitar a cada quien a su propia entrada
+  participants: Record<string, PlanParticipant>;
 }

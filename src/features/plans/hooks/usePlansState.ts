@@ -41,13 +41,13 @@ export const usePlansState = () => {
       count: 1,
       creatorId: plan.creatorId,
       //? El organizador entra como primer participante; photoURL se omite si no hay porque RTDB rechaza undefined
-      participants: [
-        {
+      participants: {
+        [plan.creatorId]: {
           id: plan.creatorId,
           name: plan.creatorName ?? "",
           ...(plan.creatorPhotoUrl && { photoURL: plan.creatorPhotoUrl }),
         },
-      ],
+      },
     });
 
     // Si falla la sala, el plan de Firestore queda sin sala (sin rollback), borrarlo o reintentar cuando se implemente unirse
