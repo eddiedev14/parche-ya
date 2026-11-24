@@ -156,7 +156,7 @@ Existe porque dos operaciones no pueden resolverse solo desde el cliente: **firm
 
 | Método | Endpoint                    | Para qué sirve                                                                                                                                                                                                      |
 | ------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET`  | `/api/imagekit-auth`        | Genera firma, token y expiración que ImageKit exige para aceptar una subida; el cliente sube la foto de perfil directo a ImageKit sin exponer la llave privada.                                                      |
+| `POST` | `/api/upload-avatar`        | Recibe la foto de perfil (JPEG, máximo 2 MB), verifica que sea una imagen real y la sube a ImageKit con la llave privada. El servidor fija el nombre (`{uid}.jpg`) y la carpeta, así que cada usuario solo puede escribir su propia foto. |
 | `GET`  | `/api/imagekit-image`       | Sirve las fotos de perfil: valida que la ruta pertenezca a `/avatars/...`, firma la URL con la llave privada (vigente 60 segundos) y devuelve la imagen redimensionada y comprimida.                                  |
 | `POST` | `/api/notify-user-joined`   | Envía el push "{nombre} se unió a tu plan" al organizador. Valida que quien llama sea parte del plan (leyendo `planRooms/{planId}`) y limpia el token si Firebase indica que ya no es válido.                         |
 | `POST` | `/api/notify-message`       | Envía el push de un mensaje nuevo a los demás participantes (nunca al remitente). Valida la participación y limita a una notificación cada 30 segundos por remitente y plan, controlado con una transacción en RTDB. |
@@ -166,7 +166,7 @@ Existe porque dos operaciones no pueden resolverse solo desde el cliente: **firm
 | Variable                                                                         | Para qué                                          |
 | -------------------------------------------------------------------------------- | ------------------------------------------------- |
 | `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`, `FIREBASE_DATABASE_URL` | Credenciales de `firebase-admin`  |
-| `IMAGEKIT_PUBLIC_KEY`, `IMAGEKIT_PRIVATE_KEY`, `IMAGEKIT_URL_ENDPOINT`          | Firma y entrega de fotos de perfil                |
+| `IMAGEKIT_PUBLIC_KEY`, `IMAGEKIT_PRIVATE_KEY`, `IMAGEKIT_URL_ENDPOINT`          | Subida y entrega de fotos de perfil                |
 | `ALLOWED_ORIGINS`                                                                | Orígenes adicionales permitidos (separados por coma) |
 
 ---
@@ -230,7 +230,7 @@ cp .env.example .env
 | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_DATABASE_URL`, `VITE_FIREBASE_APP_ID` | Conexión a Firebase (la URL de RTDB depende de la región) |
 | `VITE_API_URL`                                                                                                                         | URL del backend desplegado en Vercel                      |
-| `VITE_IMAGEKIT_PUBLIC_KEY`, `VITE_IMAGEKIT_URL_ENDPOINT`                                                                               | Foto de perfil                                            |
+| `VITE_IMAGEKIT_URL_ENDPOINT`                                                                                                           | Foto de perfil                                            |
 
 **4. Ejecutar en desarrollo**
 
