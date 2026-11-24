@@ -7,7 +7,7 @@ import { isPushSupported, registerDevice } from "../helpers/push.helper";
 const DENIED_MESSAGE =
   "No pudimos activar las notificaciones. Puedes activarlas desde los ajustes del celular";
 
-//? Estado del permiso del sistema y la acción de activarlas (alert de Explorar e item de Perfil)
+//? Estado del permiso del sistema y la acción de activarlas (alert de Explorar)
 export const usePushPermission = () => {
   const isSupported = isPushSupported();
   //? null mientras se consulta
@@ -44,7 +44,6 @@ export const usePushPermission = () => {
   return {
     isSupported,
     permission,
-    isEnabled: permission === "granted",
     enable,
   };
 };

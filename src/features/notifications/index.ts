@@ -1,4 +1,3 @@
-export { NotificationsSettingItem } from "./components/NotificationsSettingItem";
 export { PushPermissionAlert } from "./components/PushPermissionAlert";
 export { usePushRegistration } from "./hooks/usePushRegistration";
 export {

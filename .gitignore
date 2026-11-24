@@ -31,3 +31,8 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
+
+# archivos generados al compilar la config de Vite con tsc (Vite leería el .js en vez del .ts)
+/vite.config.js
+/vite.config.d.ts
+*.tsbuildinfo
