@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const imageKitApi = axios.create({
-  baseURL: "https://parche-ya.vercel.app/api",
+  baseURL: `${import.meta.env.VITE_API_URL}/api`,
 });
