@@ -44,10 +44,8 @@ export const usePlanMembership = ({
         //? La pantalla ya escucha esta sala, así que si llega null es porque no existe
         if (!room) return;
 
-        const participants = Object.values(room.participants ?? {});
-        if (participants.some((participant) => participant.id === user.id)) {
-          return room;
-        }
+        const participants = room.participants ?? {};
+        if (participants[user.id]) return room;
 
         isFull = room.count >= room.capacity;
         if (isFull) return;
@@ -62,7 +60,7 @@ export const usePlanMembership = ({
         return {
           ...room,
           count: room.count + 1,
-          participants: [...participants, me],
+          participants: { ...participants, [user.id]: me },
         };
       });
 
@@ -95,12 +93,10 @@ export const usePlanMembership = ({
       const result = await runTransaction(roomRef, (room: PlanRoom | null) => {
         if (!room) return;
 
-        const participants = Object.values(room.participants ?? {});
-        const rest = participants.filter(
-          (participant) => participant.id !== user.id,
-        );
+        //? Se saca mi entrada del mapa y el resto queda igual
+        const { [user.id]: me, ...rest } = room.participants ?? {};
         //? Si ya no estaba, no se toca nada (así count no baja dos veces)
-        if (rest.length === participants.length) return room;
+        if (!me) return room;
 
         return {
           ...room,
