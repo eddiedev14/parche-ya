@@ -8,5 +8,5 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["api", "firebase"]
+  "include": ["api", "lib"]
 }
