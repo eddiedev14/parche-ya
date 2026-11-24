@@ -1,31 +1,13 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getMessaging } from "firebase-admin/messaging";
-import { auth, db, rtdb } from "./firebaseAdmin.js";
-
-//? Orígenes que pueden llamar a este endpoint desde el navegador. Se amplían con ALLOWED_ORIGINS (separados por coma)
-const ALLOWED_ORIGINS = [
-  "http://localhost:8100", // ionic serve
-  "https://localhost", // Capacitor Android (androidScheme por defecto desde Capacitor 6)
-  "http://localhost", // Capacitor Android con androidScheme: "http"
-  "capacitor://localhost", // Capacitor iOS
-  "ionic://localhost",
-  ...(process.env.ALLOWED_ORIGINS?.split(",").map((o) => o.trim()) ?? []),
-];
-
-const setCorsHeaders = (req: VercelRequest, res: VercelResponse) => {
-  const origin = req.headers.origin;
-
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Vary", "Origin");
-  }
-
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
-};
+import { setCorsHeaders } from "../lib/cors.js";
+import { auth, db, rtdb } from "../lib/firebaseAdmin.js";
 
 //? Solo ids de Firestore: evita que un planId con "/" apunte a otro nodo de la RTDB
 const PLAN_ID_REGEX = /^[\w-]+$/;
+
+//? Un mismo usuario dispara como máximo un aviso de "se unió" cada 5 min por plan (frena el spam y los bucles unirse/salir)
+const THROTTLE_MS = 5 * 60_000;
 
 interface Participant {
   id: string;
@@ -40,7 +22,7 @@ interface PlanRoom {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  setCorsHeaders(req, res);
+  setCorsHeaders(req, res, "POST");
 
   //? Preflight: el header Authorization hace que el navegador lo envíe antes del POST
   if (req.method === "OPTIONS") {
@@ -104,7 +86,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json({ sent: false });
     }
 
-    // 6. Token del organizador
+    // 6. Límite por usuario y plan
+    //? Las funciones serverless no recuerdan nada entre llamadas, por eso la marca vive en la RTDB.
+    //? La transacción evita que dos llamadas casi simultáneas pasen las dos
+    const now = Date.now();
+    const throttle = await rtdb
+      .ref(`notifyJoinThrottle/${planId}/${uid}`)
+      .transaction((last: number | null) =>
+        last && now - last < THROTTLE_MS ? undefined : now,
+      );
+
+    if (!throttle.committed) {
+      return res.status(200).json({ sent: false });
+    }
+
+    // 7. Token del organizador
     const creatorRef = db.collection("users").doc(plan.creatorId);
     const fcmToken = (await creatorRef.get()).data()?.fcmToken;
 
@@ -112,7 +108,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json({ sent: false });
     }
 
-    // 7. Enviar la notificación
+    // 8. Enviar la notificación
     try {
       await getMessaging().send({
         token: fcmToken,

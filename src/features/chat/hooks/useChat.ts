@@ -34,16 +34,16 @@ export const useChat = () => {
   const handleSend = async (text: string) => {
     if (!user) return;
 
-    const messageSent = await sendMessage({
+    const messageId = await sendMessage({
       userId: user.id,
       name: user.displayName,
       text,
       photoUrl: user.photoUrl,
     });
 
-    if (!messageSent) Toast.error("Error enviando tu mensaje");
+    if (!messageId) Toast.error("Error enviando tu mensaje");
     //? Sin await: el aviso a los demás no debe frenar ni romper el chat
-    else notifyMessage({ planId, text });
+    else notifyMessage({ planId, messageId });
   };
 
   return {
