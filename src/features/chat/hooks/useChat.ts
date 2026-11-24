@@ -4,6 +4,7 @@ import { Toast } from "@/shared/classes/Toast.class";
 import { useRTDatabase } from "@/shared/firebase/hooks/useRTDatabase";
 import { useAuth } from "@/features/auth";
 import { usePlanDetail } from "@/features/plans";
+import { notifyMessage } from "@/features/notifications";
 import type { ChatMessage, ChatMessageDoc } from "../types/chat.types";
 
 //? Dos mensajes seguidos del mismo autor en menos de este tiempo se agrupan
@@ -33,14 +34,16 @@ export const useChat = () => {
   const handleSend = async (text: string) => {
     if (!user) return;
 
-    const messageSent = await sendMessage({
+    const messageId = await sendMessage({
       userId: user.id,
       name: user.displayName,
       text,
       photoUrl: user.photoUrl,
     });
 
-    if (!messageSent) Toast.error("Error enviando tu mensaje");
+    if (!messageId) Toast.error("Error enviando tu mensaje");
+    //? Sin await: el aviso a los demás no debe frenar ni romper el chat
+    else notifyMessage({ planId, messageId });
   };
 
   return {
