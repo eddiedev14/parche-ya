@@ -22,9 +22,7 @@
 
 # Descarga la APK
 
-Instala ParcheYa en tu celular Android:
-
-> **Enlace de descarga: pendiente.**
+Instala ParcheYa en tu celular Android: https://github.com/eddiedev14/parche-ya/releases/latest
 
 ---
 
