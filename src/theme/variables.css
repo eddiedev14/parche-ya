@@ -37,8 +37,8 @@
   /* Azul claro (info). Ionic no trae un color "info", por eso también existe la clase .ion-color-info más abajo */
   --ion-color-info: #2e90fa;
   --ion-color-info-rgb: 46, 144, 250;
-  --ion-color-info-contrast: #1f1b2e;
-  --ion-color-info-contrast-rgb: 31, 27, 46;
+  --ion-color-info-contrast: #ffffff;
+  --ion-color-info-contrast-rgb: 255, 255, 255;
   --ion-color-info-shade: #287fdc;
   --ion-color-info-tint: #439bfa;
 
